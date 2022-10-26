@@ -1,0 +1,32 @@
+{
+  "easysass.formats": [
+    {
+      "format": "expanded",
+      "extension": ".css"
+    }
+  ],
+  "easysass.compileAfterSave": false,
+  "editor.formatOnSave": true,
+  "gulptasks.pattern": "gulpfile.js",
+  "gulptasks.args": ["wch"],
+  "gulptasks.output.show": "Task Completes",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.trailingComma": "all",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  }
+}
