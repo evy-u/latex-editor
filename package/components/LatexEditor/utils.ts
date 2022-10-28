@@ -13,7 +13,6 @@ export function setSelectionRange(node: HTMLElement, selectionStart?: number, se
   } else {
     selection.selectAllChildren(node) // 选择元素下所有子内容
     selection.collapseToEnd()
-    console.log(selection)
   }
 }
 
@@ -40,7 +39,7 @@ export function contentToHtml(str: string): {
   resetData()
   const contentTree = parseStrRecursive(str)
   let resultHtml = getRecursiveHtml(contentTree)
-  console.log(' latex 公式树：', contentTree)
+  console.log('latex 公式树：', contentTree)
   console.log('latex HTML串：', resultHtml)
   return { resultHtml, contentTree }
 }

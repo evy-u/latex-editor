@@ -29,7 +29,7 @@ let editHtmlStr = $computed(() => {
   return resultHtml
 })
 let cursorNodeIndex = $ref<number | null>(null) // 光标在元素的index
-let cursorParentNode = $ref<HTMLElement | null>(null) // 光标所在的元素(直接父元素，包含Text型元素)
+let cursorNode = $ref<HTMLElement | null>(null) // 光标所在的元素(直接父元素，包含Text型元素)
 let cursorContentIndex = $ref<number | null>(null) // 光标在editContent中的index
 
 watch(
@@ -40,25 +40,30 @@ watch(
         setDefaultCursorPosition()
       }
       if (editRef && cursorNodeIndex !== null) {
-        let id = cursorParentNode?.className.split('-')[1]
-        console.log(11, cursorParentNode?.className)
+        let id = cursorNode?.className.split('-')[1] || ''
         if (!id) return
         const node = getNodeIdByDeep(signTree, id)
-        console.log(node, '888')
         if (!node) return
         if (node?.name === NameType.txt) {
-          cursorParentNode = document.querySelector(`.tx-${node.__id}`) as HTMLElement
+          cursorNode = document.querySelector(`.tx-${node.__id}`) as HTMLElement
           cursorNodeIndex = node.end
           cursorContentIndex = node.__end
-          setSelectionRange(cursorParentNode, cursorNodeIndex, cursorNodeIndex)
+          setSelectionRange(cursorNode, cursorNodeIndex, cursorNodeIndex)
         }
         if (node?.name === NameType.latex && !node.brackets) {
-          cursorParentNode = document.querySelector(`.lx-${node.__id}`) as HTMLElement
+          cursorNode = document.querySelector(`.lx-${node.__id}`) as HTMLElement
           cursorNodeIndex = node.end
           cursorContentIndex = node.__end
-          let __node = cursorParentNode?.childNodes[0] as HTMLElement
+          let __node = cursorNode?.childNodes[cursorNode?.childNodes.length - 1] as HTMLElement
           setSelectionRange(__node, cursorNodeIndex, cursorNodeIndex)
+          // TODO:
+          // if (cursorNode?.childNodes.length) {
+          //   console.log(cursorNode?.childNodes, '777')
+          //   cursorNode = document.querySelector(`.lx-${node.parentNode?.__id}`) as HTMLElement
+          //   cursorNodeIndex = node.parentNode!.__end - node.parentNode!.__start
+          // }
         }
+        console.log(cursorNode, cursorNodeIndex, cursorContentIndex, node)
       }
     })
   }
@@ -89,10 +94,10 @@ function setDefaultCursorPosition() {
       return
     }
     if (node.name == NameType.txt) {
-      cursorParentNode = document.querySelector(`.tx-${node.__id}`) as HTMLElement
+      cursorNode = document.querySelector(`.tx-${node.__id}`) as HTMLElement
       cursorNodeIndex = node.end
       cursorContentIndex = node.__end
-      setSelectionRange(cursorParentNode, cursorNodeIndex, cursorNodeIndex)
+      setSelectionRange(cursorNode, cursorNodeIndex, cursorNodeIndex)
     }
   } else {
     setCursorEnd()
@@ -100,8 +105,8 @@ function setDefaultCursorPosition() {
 }
 
 function setCursorEnd() {
-  cursorParentNode = editRef
-  setSelectionRange(cursorParentNode)
+  cursorNode = editRef
+  setSelectionRange(cursorNode)
 }
 </script>
 <style scoped lang="scss">
