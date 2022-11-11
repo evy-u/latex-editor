@@ -113,9 +113,22 @@ function setCursorEnd() {
 .editor-content {
   box-sizing: border-box;
   margin-top: 30px;
-  outline: auto;
+  outline: none;
   min-width: 100%;
   min-height: 200px;
   padding: 16px;
+  border: 2px solid rgb(206, 212, 218);
+  border-radius: 6px;
+  font-family: Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  font-size: 1.4rem;
+  span {
+    color: #f99 !important;
+  }
+  span [class~='lx'] {
+    color: red;
+  }
+  span[class~='tx'] {
+    color: red;
+  }
 }
 </style>

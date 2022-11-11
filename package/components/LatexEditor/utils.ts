@@ -47,17 +47,17 @@ function getRecursiveHtml(contentTree: SignItem[]): string {
   let resultHtml = ''
   contentTree.forEach(item => {
     if (item.name === NameType.latex) {
-      resultHtml += `<span class='lx-${item.__id}'>${item.value}`
+      resultHtml += `<span class='lx-${item.__id}' style='color:#008de9;'>${item.value}`
       if (item.brackets) {
-        resultHtml += '{'
+        resultHtml += `<span style='color:#608b4e;'>{</span>`
         for (const key in item.brackets) {
           resultHtml += getRecursiveHtml(item.brackets[key])
         }
-        resultHtml += '}'
+        resultHtml += `<span style='color:#608b4e;'>}</span>`
       }
       resultHtml += '</span>'
     } else {
-      resultHtml += `<span class='tx-${item.__id}'>${item.value}</span>`
+      resultHtml += `<span class='tx-${item.__id}' style='color:#d9822b;'>${item.value}</span>`
     }
   })
   return resultHtml
