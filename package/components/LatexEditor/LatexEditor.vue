@@ -7,7 +7,7 @@
 import Tool from './components/tool/Tool.vue'
 
 import { withDefaults, defineProps, watch, onMounted, nextTick } from 'vue'
-import { setSelectionRange, insertContent, contentToHtml, observerNode, getNodeIdByDeep } from './utils'
+import { setSelectionRange, insertContent, contentToHtml, observerNode, getNodeIdByDeep, getCursorInfo, CursorInfo } from './utils'
 import { FormulaItem } from './components/tool/formula'
 import { SignItem, NameType } from './latex/type'
 const props = withDefaults(
@@ -28,42 +28,31 @@ let editHtmlStr = $computed(() => {
   signTree = contentTree
   return resultHtml
 })
-let cursorNodeIndex = $ref<number | null>(null) // 光标在元素的index
-let cursorNode = $ref<HTMLElement | null>(null) // 光标所在的元素(直接父元素，包含Text型元素)
-let cursorContentIndex = $ref<number | null>(null) // 光标在editContent中的index
+
+let cursorInfo = $ref<CursorInfo>({
+  cursorNodeIndex: 0, // 光标在元素的index
+  cursorNode: null, // 光标所在的元素(直接父元素，包含Text型元素)
+  cursorContentIndex: 0, // 光标在editContent中的index
+  currentNodeId: 0, // 光标所在节点的id
+})
 
 watch(
   () => signTree,
   () => {
     nextTick(() => {
-      if (editRef && cursorNodeIndex === null) {
+      if (editRef && !cursorInfo?.cursorNodeIndex) {
         setDefaultCursorPosition()
       }
-      if (editRef && cursorNodeIndex !== null) {
-        let id = cursorNode?.className.split('-')[1] || ''
-        if (!id) return
-        const node = getNodeIdByDeep(signTree, id)
+      if (editRef && cursorInfo?.cursorNodeIndex) {
+        // let id = cursorInfo?.cursorNode?.className.split('-')[1] || ''
+        if (!cursorInfo.currentNodeId) return
+        console.log(cursorInfo.currentNodeId, 'id-89898', signTree)
+        const node = getNodeIdByDeep(signTree, String(cursorInfo.currentNodeId))
         if (!node) return
-        if (node?.name === NameType.txt) {
-          cursorNode = document.querySelector(`.tx-${node.__id}`) as HTMLElement
-          cursorNodeIndex = node.end
-          cursorContentIndex = node.__end
-          setSelectionRange(cursorNode, cursorNodeIndex, cursorNodeIndex)
+        cursorInfo = getCursorInfo(node)
+        if (cursorInfo && cursorInfo!.cursorNode) {
+          setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
         }
-        if (node?.name === NameType.latex && !node.brackets) {
-          cursorNode = document.querySelector(`.lx-${node.__id}`) as HTMLElement
-          cursorNodeIndex = node.end
-          cursorContentIndex = node.__end
-          let __node = cursorNode?.childNodes[cursorNode?.childNodes.length - 1] as HTMLElement
-          setSelectionRange(__node, cursorNodeIndex, cursorNodeIndex)
-          // TODO:
-          // if (cursorNode?.childNodes.length) {
-          //   console.log(cursorNode?.childNodes, '777')
-          //   cursorNode = document.querySelector(`.lx-${node.parentNode?.__id}`) as HTMLElement
-          //   cursorNodeIndex = node.parentNode!.__end - node.parentNode!.__start
-          // }
-        }
-        console.log(cursorNode, cursorNodeIndex, cursorContentIndex, node)
       }
     })
   }
@@ -76,7 +65,7 @@ onMounted(() => {
 // 点击公式
 function handleClickFormula(dataItem: FormulaItem) {
   const { formula } = dataItem
-  editContent = insertContent(editContent, formula, cursorContentIndex)
+  editContent = insertContent(editContent, formula, cursorInfo!.cursorContentIndex)
 }
 
 /**
@@ -87,17 +76,16 @@ function handleClickFormula(dataItem: FormulaItem) {
  */
 function setDefaultCursorPosition() {
   const lastItem = Array.from(editRef.childNodes).slice(-1)[0] as HTMLElement // 最后一个元素
+  console.log(lastItem.className.split('-')[1])
   if (lastItem.className.includes('lx-')) {
     const node = getNodeIdByDeep(signTree, lastItem.className.split('-')[1])
     if (!node) {
       setCursorEnd()
       return
     }
-    if (node.name == NameType.txt) {
-      cursorNode = document.querySelector(`.tx-${node.__id}`) as HTMLElement
-      cursorNodeIndex = node.end
-      cursorContentIndex = node.__end
-      setSelectionRange(cursorNode, cursorNodeIndex, cursorNodeIndex)
+    cursorInfo = getCursorInfo(node)
+    if (cursorInfo) {
+      setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
     }
   } else {
     setCursorEnd()
@@ -105,8 +93,8 @@ function setDefaultCursorPosition() {
 }
 
 function setCursorEnd() {
-  cursorNode = editRef
-  setSelectionRange(cursorNode)
+  cursorInfo!.cursorNode = editRef
+  setSelectionRange(cursorInfo!.cursorNode)
 }
 </script>
 <style scoped lang="scss">

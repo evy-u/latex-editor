@@ -2,7 +2,8 @@ import { parseStrRecursive, resetData } from './latex/parse'
 import { NameType, SignItem } from './latex/type'
 
 // 设置光标的位置
-export function setSelectionRange(node: HTMLElement, selectionStart?: number, selectionEnd?: number) {
+export function setSelectionRange(node: HTMLElement | null, selectionStart?: number, selectionEnd?: number) {
+  if (!node) return
   const selection = window.getSelection() as Selection
   selection.removeAllRanges()
   if (selectionStart !== undefined && selectionEnd !== undefined) {
@@ -47,7 +48,7 @@ function getRecursiveHtml(contentTree: SignItem[]): string {
   let resultHtml = ''
   contentTree.forEach(item => {
     if (item.name === NameType.latex) {
-      resultHtml += `<span class='lx-${item.__id}' style='color:#008de9;'>${item.value}`
+      resultHtml += `<span class='${item.brackets ? 'bracket' : ''} lx-${item.__id}' style='color:${item.brackets ? '#008de9' : '#eb1e1e'};'>${item.value}`
       if (item.brackets) {
         resultHtml += `<span style='color:#608b4e;'>{</span>`
         for (const key in item.brackets) {
@@ -64,19 +65,35 @@ function getRecursiveHtml(contentTree: SignItem[]): string {
 }
 
 // 获取最深层元素
+
 export function getNodeIdByDeep(signTree: SignItem[], id: string, noSame: boolean = false): SignItem | null {
+  console.log(signTree, id)
   let node: SignItem | null = null
+  let isDeep = false
+
   for (let index = 0; index < signTree.length; index++) {
     let item = signTree[index]
+    if (!noSame && item.__id.toString() === id) {
+      isDeep = true
+    }
     if (item.brackets) {
       for (const key in item.brackets) {
         node = getNodeIdByDeep(item.brackets[key], id, true)
       }
-    } else if (item.__id.toString() === id || noSame) {
+    }
+    if (item.__id.toString() === id && !item.brackets) {
+      console.log(222, item)
+      node = item
+      break
+    }
+
+    if (!isDeep && noSame && !item.brackets) {
+      console.log(111, isDeep)
       node = item
       break
     }
   }
+  isDeep = false
   return node
 }
 
@@ -99,72 +116,57 @@ export async function observerNode(node: HTMLElement) {
     characterData: true,
   })
 }
+export type CursorInfo =
+  | {
+      cursorNode: HTMLElement | null
+      cursorNodeIndex: number
+      cursorContentIndex: number
+      currentNodeId: number
+    }
+  | undefined
 
-export function getCursorPosition(ele: InstanceType<typeof HTMLDivElement>): {
-  start: number
-  end: number
-} {
-  console.log(ele, ele.innerHTML)
-  let start = 0
-  let end = 0
-  const isIE = !!document.all
-  if (isIE) {
-    //selection 当前激活选中区，即高亮文本块，和/或文当中用户可执行某些操作的其它元素。
-    //createRange 从当前文本选中区中创建 TextRange 对象，
-    //或从控件选中区中创建 controlRange 集合。
-    let sTextRange = document.selection.createRange()
-
-    //判断选中的是不是textarea对象
-    if (sTextRange.parentElement() == ele) {
-      //创建一个TextRange对象
-      let oTextRange = document.body.createTextRange()
-      //移动文本范围以便范围的开始和结束位置能够完全包含给定元素的文本。
-      oTextRange.moveToElementText(ele)
-
-      //此时得到两个 TextRange
-      //oTextRange文本域(textarea)中文本的TextRange对象
-      //sTextRange是选中区域文本的TextRange对象
-
-      //compareEndPoints方法介绍，compareEndPoints方法用于比较两个TextRange对象的位置
-      //StartToEnd  比较TextRange开头与参数TextRange的末尾。
-      //StartToStart比较TextRange开头与参数TextRange的开头。
-      //EndToStart  比较TextRange末尾与参数TextRange的开头。
-      //EndToEnd    比较TextRange末尾与参数TextRange的末尾。
-
-      //moveStart方法介绍，更改范围的开始位置
-      //character 按字符移动
-      //word       按单词移动
-      //sentence  按句子移动
-      //textedit  启动编辑动作
-
-      //这里我们比较oTextRange和sTextRange的开头，的到选中区域的开头位置
-      for (start = 0; oTextRange.compareEndPoints('StartToStart', sTextRange) < 0; start++) {
-        oTextRange.moveStart('character', 1)
-      }
-      //需要计算一下\n的数目(按字符移动的方式不计\n,所以这里加上)
-      for (let i = 0; i <= start; i++) {
-        if (ele.innerHTML.charAt(i) == '\n') {
-          start++
-        }
-      }
-
-      //再计算一次结束的位置
-      oTextRange.moveToElementText(ele)
-      for (end = 0; oTextRange.compareEndPoints('StartToEnd', sTextRange) < 0; end++) {
-        oTextRange.moveStart('character', 1)
-      }
-      for (let i = 0; i <= end; i++) {
-        if (ele.innerHTML.charAt(i) == '\n') {
-          end++
+/**
+ *
+ * 如果 cursorNode 是文字节点，那么cursorNodeIndex就是从该文字节点的第一个字开始，直到被选中的第一个字之间的字数（如果第一个字就被选中，那么偏移量为零）再加上被选中文字的长度。
+ * 如果 cursorNode 是一个元素，那么cursorNodeIndex就是在选区最后一个节点的同级节点总数的下标。(这些节点都是 cursorNode 的子节点)
+ */
+export function getCursorInfo(node: SignItem): CursorInfo {
+  console.log(node)
+  console.log('node-signItem:', Object.assign({}, node))
+  let cursorNode: HTMLElement | null = null
+  let cursorNodeIndex = 0
+  let cursorContentIndex = 0
+  let currentNodeId = 0
+  if (node.name === NameType.txt) {
+    // 文本型节点
+    cursorNode = document.querySelector(`.tx-${node.__id}`) as HTMLDivElement
+    cursorNodeIndex = node.end
+    cursorContentIndex = node.__end
+    currentNodeId = node.__id
+  } else {
+    if (!node.brackets) {
+      cursorNode = document.querySelector(`.lx-${node.__id}`) as HTMLElement
+      cursorNodeIndex = node.end
+      cursorContentIndex = node.__end
+      console.log('cursorNode.childNodes', cursorNode.childNodes)
+      if (cursorNode.childNodes.length) {
+        const lastChildTextNode = Array.from(cursorNode.childNodes).slice(-1)[0] as Text
+        if (lastChildTextNode?.nodeName === '#text') {
+          // 文本型节点
+          currentNodeId = node.__id + 1
+          cursorNode = lastChildTextNode as unknown as HTMLElement
+          cursorNodeIndex = lastChildTextNode.length
         }
       }
     }
-  } else {
-    start = ele.selectionStart
-    end = ele.selectionEnd
   }
+
+  console.log('cursorNode:', cursorNode, 'cursorNodeIndex:', cursorNodeIndex, 'cursorContentIndex:', cursorContentIndex)
+
   return {
-    start,
-    end,
+    cursorNode: cursorNode as HTMLElement,
+    cursorNodeIndex,
+    cursorContentIndex,
+    currentNodeId,
   }
 }
