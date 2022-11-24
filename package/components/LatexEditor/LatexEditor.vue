@@ -1,13 +1,14 @@
 <template>
   <Tool v-if="isTool" :editRef="editRef" @handleClickFormula="handleClickFormula"></Tool>
   <div contenteditable="true" class="editor-content" ref="editRef" v-bind:innerHTML="editHtmlStr"></div>
+  <div>{{ editContent }}</div>
   {{ editContent.length }}
 </template>
 <script setup lang="ts">
 import Tool from './components/tool/Tool.vue'
 
 import { withDefaults, defineProps, watch, onMounted, nextTick } from 'vue'
-import { setSelectionRange, insertContent, contentToHtml, observerNode, getNodeIdByDeep, getCursorInfo, CursorInfo } from './utils'
+import { setSelectionRange, insertContent, contentToHtml, getNodeByDeep, getNodeIdByDeep, getCursorInfo, CursorInfo } from './utils'
 import { FormulaItem } from './components/tool/formula'
 import { SignItem, NameType } from './latex/type'
 const props = withDefaults(
@@ -20,7 +21,7 @@ const props = withDefaults(
 )
 
 const editRef = $ref<InstanceType<typeof HTMLDivElement>>() // 编辑框元素
-let editContent = $ref<string>('222\\sqrt{\\sqrt{}}') // latex公式串
+let editContent = $ref<string>('\\sqrt{66\\cos\\sqrt{3}}') // latex公式串 \\frac{}{}\\sin777\\sqrt{66\\cos}hh
 let signTree = $ref<SignItem[]>([]) // latex 公式树
 let editHtmlStr = $computed(() => {
   // latex HTML串
@@ -40,13 +41,11 @@ watch(
   () => signTree,
   () => {
     nextTick(() => {
-      if (editRef && !cursorInfo?.cursorNodeIndex) {
+      if (editRef && !cursorInfo?.cursorNodeIndex !== null) {
         setDefaultCursorPosition()
       }
-      if (editRef && cursorInfo?.cursorNodeIndex) {
-        // let id = cursorInfo?.cursorNode?.className.split('-')[1] || ''
-        if (!cursorInfo.currentNodeId) return
-        console.log(cursorInfo.currentNodeId, 'id-89898', signTree)
+      if (editRef && cursorInfo?.cursorNodeIndex !== null) {
+        if (!cursorInfo?.currentNodeId) return
         const node = getNodeIdByDeep(signTree, String(cursorInfo.currentNodeId))
         if (!node) return
         cursorInfo = getCursorInfo(node)
@@ -75,15 +74,16 @@ function handleClickFormula(dataItem: FormulaItem) {
  * 否则，默认光标在editRef的最后一位
  */
 function setDefaultCursorPosition() {
-  const lastItem = Array.from(editRef.childNodes).slice(-1)[0] as HTMLElement // 最后一个元素
-  console.log(lastItem.className.split('-')[1])
-  if (lastItem.className.includes('lx-')) {
-    const node = getNodeIdByDeep(signTree, lastItem.className.split('-')[1])
+  const lastItem = getNodeByDeep(editRef) as HTMLElement // 最后一个元素
+  // console.log('lastItem:', lastItem, lastItem?.className.split('-')[1])
+  if (lastItem?.className.includes('lx-') || lastItem?.className.includes('tx-')) {
+    const node = getNodeIdByDeep(signTree, lastItem?.className.split('-')[1])
     if (!node) {
       setCursorEnd()
       return
     }
     cursorInfo = getCursorInfo(node)
+    // console.log('cursorInfo:', cursorInfo)
     if (cursorInfo) {
       setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
     }
