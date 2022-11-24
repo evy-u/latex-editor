@@ -1,5 +1,6 @@
 import { parseStrRecursive, resetData } from './latex/parse'
 import { NameType, SignItem } from './latex/type'
+import _ from 'lodash'
 
 // 设置光标的位置
 export function setSelectionRange(node: HTMLElement | null, selectionStart?: number, selectionEnd?: number) {
@@ -50,11 +51,11 @@ function getRecursiveHtml(contentTree: SignItem[]): string {
     if (item.name === NameType.latex) {
       resultHtml += `<span class='${item.brackets ? 'bracket' : ''} lx-${item.__id}' style='color:${item.brackets ? '#008de9' : '#eb1e1e'};'>${item.value}`
       if (item.brackets) {
-        resultHtml += `<span style='color:#608b4e;'>{</span>`
         for (const key in item.brackets) {
+          resultHtml += `<span style='color:#608b4e;'>{</span>`
           resultHtml += getRecursiveHtml(item.brackets[key])
+          resultHtml += `<span style='color:#608b4e;'>}</span>`
         }
-        resultHtml += `<span style='color:#608b4e;'>}</span>`
       }
       resultHtml += '</span>'
     } else {
@@ -64,37 +65,54 @@ function getRecursiveHtml(contentTree: SignItem[]): string {
   return resultHtml
 }
 
-// 获取最深层元素
-
+// 获取signTree的最深层元素
 export function getNodeIdByDeep(signTree: SignItem[], id: string, noSame: boolean = false): SignItem | null {
-  console.log(signTree, id)
+  // console.log('getNodeIdByDeep', id, signTree)
   let node: SignItem | null = null
-  let isDeep = false
-
   for (let index = 0; index < signTree.length; index++) {
     let item = signTree[index]
-    if (!noSame && item.__id.toString() === id) {
-      isDeep = true
-    }
+
     if (item.brackets) {
       for (const key in item.brackets) {
         node = getNodeIdByDeep(item.brackets[key], id, true)
       }
     }
-    if (item.__id.toString() === id && !item.brackets) {
-      console.log(222, item)
-      node = item
-      break
-    }
-
-    if (!isDeep && noSame && !item.brackets) {
-      console.log(111, isDeep)
-      node = item
-      break
+    if (!noSame) {
+      // 外层
+      if (!item.brackets && item.__id.toString() === id) {
+        node = item
+        break
+      }
+    } else {
+      // 里层
+      if (item.__id.toString() === id && !item.brackets) {
+        node = item
+        break
+      }
+      if (item.__id.toString() !== id && !item.brackets && item.name === 'txt') {
+        node = item
+        break
+      }
     }
   }
-  isDeep = false
   return node
+}
+
+// 获取HTMLElENT最里层的元素
+export function getNodeByDeep(ele: HTMLElement): HTMLElement | undefined {
+  if (ele.children?.length) {
+    let children = _.reverse(Array.from(ele?.children))
+    for (let i = 0; i < children.length; i++) {
+      // 最后一个有latex标识的地方
+      const node = getNodeByDeep(children[i] as HTMLElement)
+      if (node) {
+        return node
+      }
+    }
+  }
+  if (!ele.children?.length && ele.nodeType === 1 && ele.className.length) {
+    return ele
+  }
 }
 
 //监听元素是否变化
@@ -131,8 +149,7 @@ export type CursorInfo =
  * 如果 cursorNode 是一个元素，那么cursorNodeIndex就是在选区最后一个节点的同级节点总数的下标。(这些节点都是 cursorNode 的子节点)
  */
 export function getCursorInfo(node: SignItem): CursorInfo {
-  console.log(node)
-  console.log('node-signItem:', Object.assign({}, node))
+  // console.log('node-signItem:', Object.assign({}, node))
   let cursorNode: HTMLElement | null = null
   let cursorNodeIndex = 0
   let cursorContentIndex = 0
@@ -148,20 +165,22 @@ export function getCursorInfo(node: SignItem): CursorInfo {
       cursorNode = document.querySelector(`.lx-${node.__id}`) as HTMLElement
       cursorNodeIndex = node.end
       cursorContentIndex = node.__end
-      console.log('cursorNode.childNodes', cursorNode.childNodes)
+      // console.log('cursorNode.childNodes', cursorNode.childNodes)
       if (cursorNode.childNodes.length) {
         const lastChildTextNode = Array.from(cursorNode.childNodes).slice(-1)[0] as Text
         if (lastChildTextNode?.nodeName === '#text') {
           // 文本型节点
-          currentNodeId = node.__id + 1
+          currentNodeId = node.__id
           cursorNode = lastChildTextNode as unknown as HTMLElement
           cursorNodeIndex = lastChildTextNode.length
+          // console.log(cursorContentIndex, node.value.length)
+          cursorContentIndex = cursorContentIndex + node.value.length
         }
       }
     }
   }
 
-  console.log('cursorNode:', cursorNode, 'cursorNodeIndex:', cursorNodeIndex, 'cursorContentIndex:', cursorContentIndex)
+  console.log('currentNodeId:', currentNodeId, 'cursorNode:', cursorNode, 'cursorNodeIndex:', cursorNodeIndex, 'cursorContentIndex:', cursorContentIndex)
 
   return {
     cursorNode: cursorNode as HTMLElement,

@@ -1,68 +1,66 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.19/libexec/bin/yarn.js
 
 PATH: 
-  /home/xihaoyan/.local/share/pnpm:/home/xihaoyan/.vscode-server/bin/d045a5eda657f4d7b676dedbfa7aab8207f8a075/bin/remote-cli:/home/xihaoyan/.local/share/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/ImageMagick-7.1.0-Q16:/mnt/c/Program Files/Microsoft VS Code/bin:/mnt/c/Program Files (x86)/Tencent/微信web开发者工具/dll:/mnt/c/Program Files/HP/Common/HPDestPlgIn/:/mnt/c/Program Files (x86)/HP/Common/HPDestPlgIn/:/mnt/c/Program Files (x86)/HP/IdrsOCR_15.5.1219.0/:/mnt/c/Program Files/HP/IdrsOCR_15.5.1219.0/:/mnt/c/Users/haoya/AppData/Local/Microsoft/WindowsApps:/mnt/c/program files/esafenet/cobra docguard client:/mnt/c/Users/haoya/AppData/Roaming/npm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files/HP/Common/HPDestPlgIn/:/mnt/c/Program Files (x86)/HP/Common/HPDestPlgIn/:/mnt/c/Users/haoya/AppData/Local/Programs/Microsoft VS Code/bin
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 Yarn version: 
-  1.22.17
+  1.22.19
 
 Node version: 
-  17.3.0
+  14.17.6
 
 Platform: 
-  linux x64
+  darwin x64
 
 Trace: 
-  SyntaxError: /home/xihaoyan/workspace/latex-editor/package.json: Unexpected token } in JSON at position 495
-      at JSON.parse (<anonymous>)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+  Error: https://registry.npmjs.org/rollup-plugin-uglify/-/rollup-plugin-uglify-6.0.4.tgz: ETIMEDOUT
+      at Timeout._onTimeout (/usr/local/Cellar/yarn/1.22.19/libexec/lib/cli.js:141550:19)
+      at listOnTimeout (internal/timers.js:557:17)
+      at processTimers (internal/timers.js:500:7)
 
 npm manifest: 
   {
-  	"name": "latex-editor",
-  	"version": "0.0.1",
-  	"description": "",
-  	"main": "./dist/index.umd.js",
-  	"module": "./dist/index.es.js",
-  	"scripts": {
-  		"husky": "husky install",
-  		"build": "vite build -c viteconfig.lib.build.ts",
-  		"dev": "vite --mode development"
-  	},
-  	"repository": "",
-  	"author": "xhy",
-  	"license": "MIT",
-  	"dependencies": {
-  		"lodash": "^4.17.21",
-  		"uid": "^2.0.0",
-  		"xregexp": "^5.1.1",
-      "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.153",
-  	},
-  	"devDependencies": {
-  		"@rollup/plugin-strip": "^2.1.0",
-  		"@types/node": "^17.0.8",
-  		"@vitejs/plugin-vue": "^2.0.1",
-  		"chalk": "^5.0.0",
-  		"element-plus": "^1.3.0-beta.5",
-  		"rollup-plugin-uglify": "^6.0.4",
-  		"sass": "^1.46.0",
-  		"typescript": "^4.7.2",
-  		"vite": "^2.9.9",
-  		"vite-plugin-dts": "^1.2.0",
-  		"vue": "^3.2.26",
-  		"vue-router": "^4.0.12"
-  	},
-  	"types": "types/package/index.d.ts",
-  	"style": "./dist/style.css",
-  	"files": [
-  		"dist",
-  		"types",
-  		"README.md"
-  	]
+    "name": "kz-latex-editor",
+    "version": "0.0.1",
+    "description": "",
+    "main": "./dist/index.umd.js",
+    "module": "./dist/index.es.js",
+    "scripts": {
+      "husky": "husky install",
+      "build": "vite build -c viteconfig.lib.build.ts",
+      "dev": "vite --mode development"
+    },
+    "repository": "",
+    "author": "xhy",
+    "license": "MIT",
+    "dependencies": {
+      "lodash": "^4.17.21",
+      "uid": "^2.0.0",
+      "xregexp": "^5.1.1",
+      "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.153"
+    },
+    "devDependencies": {
+      "@rollup/plugin-strip": "^2.1.0",
+      "@types/node": "^17.0.8",
+      "@vitejs/plugin-vue": "^2.0.1",
+      "chalk": "^5.0.0",
+      "element-plus": "^1.3.0-beta.5",
+      "rollup-plugin-uglify": "^6.0.4",
+      "sass": "^1.46.0",
+      "typescript": "^4.7.2",
+      "vite": "^2.9.9",
+      "vite-plugin-dts": "^1.2.0",
+      "vue": "^3.2.26",
+      "vue-router": "^4.0.12"
+    },
+    "types": "types/package/index.d.ts",
+    "style": "./dist/style.css",
+    "files": [
+      "dist",
+      "types",
+      "README.md"
+    ]
   }
 
 yarn manifest: 
@@ -391,6 +389,11 @@ Lockfile:
     dependencies:
       vue-demi "*"
   
+  JSV@^4.0.x:
+    version "4.0.2"
+    resolved "https://registry.npmmirror.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
+    integrity sha512-ZJ6wx9xaKJ3yFUhq5/sk82PJMuUyLk277I8mQeyDgCTjGdjWJIvPfaU5LIXaMuaN2UO1X3kZH4+lgphublZUHw==
+  
   ajv@~6.12.6:
     version "6.12.6"
     resolved "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
@@ -414,6 +417,11 @@ Lockfile:
     integrity sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==
     dependencies:
       color-convert "^2.0.1"
+  
+  ansi-styles@~1.0.0:
+    version "1.0.0"
+    resolved "https://registry.npmmirror.com/ansi-styles/-/ansi-styles-1.0.0.tgz#cb102df1c56f5123eab8b67cd7b98027a0279178"
+    integrity sha512-3iF4FIKdxaVYT3JqQuY3Wat/T2t7TRbbQ94Fu50ZUCbLy4TFbTzr90NOHQodQkNqmeEGCw8WbeP78WNi6SKYUA==
   
   anymatch@~3.1.2:
     version "3.1.2"
@@ -439,6 +447,21 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
     integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+  
+  base64-arraybuffer@^1.0.2:
+    version "1.0.2"
+    resolved "https://registry.npmmirror.com/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz#1c37589a7c4b0746e34bd1feb951da2df01c1bdc"
+    integrity sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==
+  
+  bin-code-editor@^0.9.0:
+    version "0.9.0"
+    resolved "https://registry.npmmirror.com/bin-code-editor/-/bin-code-editor-0.9.0.tgz#981bd373586ed8bb9ef1faf118f67f13c0cbdba5"
+    integrity sha512-ZIfKFqPPmKD9g+H6YcNp/gDE1O3zzi+n6dxOgF5XAJxxk3OQgrLhS3mBWxJ2KQ94a+bbVAlUDgqapMy489VfyQ==
+    dependencies:
+      codemirror "^5.52.2"
+      codemirror-formatting "^1.0.0"
+      jsonlint "^1.6.3"
+      script-loader "^0.7.2"
   
   binary-extensions@^2.0.0:
     version "2.2.0"
@@ -481,6 +504,15 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/chalk/-/chalk-5.0.0.tgz#bd96c6bb8e02b96e08c0c3ee2a9d90e050c7b832"
     integrity sha512-/duVOqst+luxCQRKEo4bNxinsOQtMP80ZYm7mMqzuh5PociNL0PvmHFvREJ9ueYL2TxlHjBcmLCdmocx9Vg+IQ==
   
+  chalk@~0.4.0:
+    version "0.4.0"
+    resolved "https://registry.npmmirror.com/chalk/-/chalk-0.4.0.tgz#5199a3ddcd0c1efe23bc08c1b027b06176e0c64f"
+    integrity sha512-sQfYDlfv2DGVtjdoQqxS0cEZDroyG8h6TamA6rvxwlrU5BaSLDx9xhatBYl2pxZ7gmpNaPFVwBtdGdu5rQ+tYQ==
+    dependencies:
+      ansi-styles "~1.0.0"
+      has-color "~0.1.0"
+      strip-ansi "~0.1.0"
+  
   "chokidar@>=3.0.0 <4.0.0":
     version "3.5.3"
     resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.3.tgz#1cf37c8707b932bd1af1ae22c0432e2acd1903bd"
@@ -502,6 +534,16 @@ Lockfile:
     integrity sha512-GEqWvEWWsOvER+g9keO4ohFoD3ymwyCnqY3hoTr7GZipYFwEhMHJw+TtV0rfgRhNImM6QWZGO2XYjlJVyYT62w==
     dependencies:
       tslib "2.3.1"
+  
+  codemirror-formatting@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.npmmirror.com/codemirror-formatting/-/codemirror-formatting-1.0.0.tgz#879cc1fdd9018343c1d5511769ce5360d705ebf2"
+    integrity sha512-br9yM6eJI3pJHekEnoyHaBEb1B7XxxDjju+vRyBe8QGLp5saTIXXkZ+eFCTqXSAtI8QEZDFVEX2/SOjH2sVWRQ==
+  
+  codemirror@^5.52.2:
+    version "5.65.9"
+    resolved "https://registry.npmmirror.com/codemirror/-/codemirror-5.65.9.tgz#ec70c92aa206ee4c9853d5f1e7c4ed356cdab68c"
+    integrity sha512-19Jox5sAKpusTDgqgKB5dawPpQcY+ipQK7xoEI+MVucEF9qqFaXpeqY1KaoyGBso/wHQoDa4HMMxMjdsS3Zzzw==
   
   color-convert@^1.9.0:
     version "1.9.3"
@@ -541,6 +583,13 @@ Lockfile:
     version "3.26.0"
     resolved "https://registry.npmmirror.com/core-js-pure/-/core-js-pure-3.26.0.tgz#7ad8a5dd7d910756f3124374b50026e23265ca9a"
     integrity sha512-LiN6fylpVBVwT8twhhluD9TzXmZQQsr2I2eIKtWNbZI1XMfBT7CV18itaN6RA7EtQd/SDdRx/wzvAShX2HvhQA==
+  
+  css-line-break@^2.1.0:
+    version "2.1.0"
+    resolved "https://registry.npmmirror.com/css-line-break/-/css-line-break-2.1.0.tgz#bfef660dfa6f5397ea54116bb3cb4873edbc4fa0"
+    integrity sha512-FHcKFCZcAha3LwfVBhCQbW2nCNbkZXn7KVUJcsT5/P8YmfsVja0FMPJr0B903j/E69HUphKiV9iQArX8SDYA4w==
+    dependencies:
+      utrie "^1.0.2"
   
   csstype@^2.6.8:
     version "2.6.19"
@@ -716,6 +765,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-2.0.2.tgz#52f010178c2a4c117a7757cfe942adb7d2da4cac"
     integrity sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==
   
+  exec-sh@0.3.4:
+    version "0.3.4"
+    resolved "https://registry.npmmirror.com/exec-sh/-/exec-sh-0.3.4.tgz#3a018ceb526cc6f6df2bb504b2bfe8e3a4934ec5"
+    integrity sha512-sEFIkc61v75sWeOe72qyrqg2Qg0OuLESziUDk/O/z2qgS15y2gWVFrI6f2Qn/qw/0/NCfCEsmNA4zOjkwEZT1A==
+  
   fast-deep-equal@^3.1.1:
     version "3.1.3"
     resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
@@ -796,6 +850,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
     integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
   
+  has-color@~0.1.0:
+    version "0.1.7"
+    resolved "https://registry.npmmirror.com/has-color/-/has-color-0.1.7.tgz#67144a5260c34fc3cca677d041daf52fe7b78b2f"
+    integrity sha512-kaNz5OTAYYmt646Hkqw50/qyxP2vFnTVu5AQ1Zmk22Kk5+4Qx6BpO8+u7IKsML5fOsFk0ZT0AcCJNYwcvaLBvw==
+  
   has-flag@^3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
@@ -812,6 +871,14 @@ Lockfile:
     integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
     dependencies:
       function-bind "^1.1.1"
+  
+  html2canvas@^1.4.1:
+    version "1.4.1"
+    resolved "https://registry.npmmirror.com/html2canvas/-/html2canvas-1.4.1.tgz#7cef1888311b5011d507794a066041b14669a543"
+    integrity sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==
+    dependencies:
+      css-line-break "^2.1.0"
+      text-segmentation "^1.0.3"
   
   immutable@^4.0.0:
     version "4.0.0"
@@ -900,6 +967,22 @@ Lockfile:
     optionalDependencies:
       graceful-fs "^4.1.6"
   
+  jsonlint@^1.6.3:
+    version "1.6.3"
+    resolved "https://registry.npmmirror.com/jsonlint/-/jsonlint-1.6.3.tgz#cb5e31efc0b78291d0d862fbef05900adf212988"
+    integrity sha512-jMVTMzP+7gU/IyC6hvKyWpUU8tmTkK5b3BPNuMI9U8Sit+YAWLlZwB6Y6YrdCxfg2kNz05p3XY3Bmm4m26Nv3A==
+    dependencies:
+      JSV "^4.0.x"
+      nomnom "^1.5.x"
+  
+  "learnable-lib@git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.153":
+    version "1.0.1"
+    resolved "git+ssh://git@39.106.137.222:songle/learnable-lib.git#50f1698c414de7d6cf9372a5b1f53fd520f507e0"
+    dependencies:
+      bin-code-editor "^0.9.0"
+      exec-sh "0.3.4"
+      html2canvas "^1.4.1"
+  
   lodash.get@^4.4.2:
     version "4.4.2"
     resolved "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
@@ -979,6 +1062,14 @@ Lockfile:
     resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
     integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
   
+  nomnom@^1.5.x:
+    version "1.8.1"
+    resolved "https://registry.npmmirror.com/nomnom/-/nomnom-1.8.1.tgz#2151f722472ba79e50a76fc125bb8c8f2e4dc2a7"
+    integrity sha512-5s0JxqhDx9/rksG2BTMVN1enjWSvPidpoSgViZU4ZXULyTe+7jxcCRLB6f42Z0l1xYJpleCBtSyY6Lwg3uu5CQ==
+    dependencies:
+      chalk "~0.4.0"
+      underscore "~1.6.0"
+  
   normalize-path@^3.0.0, normalize-path@~3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
@@ -1036,6 +1127,11 @@ Lockfile:
     version "1.2.3"
     resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
     integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
+  
+  raw-loader@~0.5.1:
+    version "0.5.1"
+    resolved "https://registry.npmmirror.com/raw-loader/-/raw-loader-0.5.1.tgz#0c3d0beaed8a01c966d9787bf778281252a979aa"
+    integrity sha512-sf7oGoLuaYAScB4VGr0tzetsYlS8EJH6qnTCfQ/WVEa89hALQ4RQfCKt5xCyPQKPDUbVUAIP1QsxAwfAjlDp7Q==
   
   readdirp@~3.6.0:
     version "3.6.0"
@@ -1111,6 +1207,13 @@ Lockfile:
       immutable "^4.0.0"
       source-map-js ">=0.6.2 <2.0.0"
   
+  script-loader@^0.7.2:
+    version "0.7.2"
+    resolved "https://registry.npmmirror.com/script-loader/-/script-loader-0.7.2.tgz#2016db6f86f25f5cf56da38915d83378bb166ba7"
+    integrity sha512-UMNLEvgOAQuzK8ji8qIscM3GIrRCWN6MmMXGD4SD5l6cSycgGsCo0tX5xRnfQcoghqct0tjHjcykgI1PyBE2aA==
+    dependencies:
+      raw-loader "~0.5.1"
+  
   semver@~7.3.0:
     version "7.3.7"
     resolved "https://registry.npmjs.org/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
@@ -1148,6 +1251,11 @@ Lockfile:
     resolved "https://registry.npmjs.org/string-argv/-/string-argv-0.3.1.tgz#95e2fbec0427ae19184935f816d74aaa4c5c19da"
     integrity sha512-a1uQGz7IyVy9YwhqjZIZu1c8JO8dNIe20xBmSS6qu9kv++k3JGzCVmprbNN5Kn+BgzD5E7YYwg1CcjuJMRNsvg==
   
+  strip-ansi@~0.1.0:
+    version "0.1.1"
+    resolved "https://registry.npmmirror.com/strip-ansi/-/strip-ansi-0.1.1.tgz#39e8a98d044d150660abe4a6808acf70bb7bc991"
+    integrity sha512-behete+3uqxecWlDAm5lmskaSaISA+ThQ4oNNBDTBJt0x2ppR6IPqfZNuj6BLaLJ/Sji4TPZlcRyOis8wXQTLg==
+  
   strip-json-comments@~3.1.1:
     version "3.1.1"
     resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
@@ -1178,6 +1286,13 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
     integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
+  
+  text-segmentation@^1.0.3:
+    version "1.0.3"
+    resolved "https://registry.npmmirror.com/text-segmentation/-/text-segmentation-1.0.3.tgz#52a388159efffe746b24a63ba311b6ac9f2d7943"
+    integrity sha512-iOiPUo/BGnZ6+54OsWxZidGCsdU8YbE4PSpdPinp7DeMtUJNJBoJ/ouUSTJjHkh1KntHaltHl/gDs2FC4i5+Nw==
+    dependencies:
+      utrie "^1.0.2"
   
   timsort@~0.3.0:
     version "0.3.0"
@@ -1226,6 +1341,11 @@ Lockfile:
     dependencies:
       "@lukeed/csprng" "^1.0.0"
   
+  underscore@~1.6.0:
+    version "1.6.0"
+    resolved "https://registry.npmmirror.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
+    integrity sha512-z4o1fvKUojIWh9XuaVLUDdf86RQiq13AC1dmHbTpoyuu+bquHms76v16CjycCbec87J7z0k//SiQVk0sMdFmpQ==
+  
   universalify@^0.1.0:
     version "0.1.2"
     resolved "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
@@ -1242,6 +1362,13 @@ Lockfile:
     integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
     dependencies:
       punycode "^2.1.0"
+  
+  utrie@^1.0.2:
+    version "1.0.2"
+    resolved "https://registry.npmmirror.com/utrie/-/utrie-1.0.2.tgz#d42fe44de9bc0119c25de7f564a6ed1b2c87a645"
+    integrity sha512-1MLa5ouZiOmQzUbjbu9VmjLzn1QLXBhwpUa7kdLUQK+KQ5KA9I1vk5U4YHe/X2Ch7PYnJfWuWT+VbuxbGwljhw==
+    dependencies:
+      base64-arraybuffer "^1.0.2"
   
   validator@^13.7.0:
     version "13.7.0"
