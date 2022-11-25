@@ -3,6 +3,7 @@ import { type MatchRecursiveValueNameMatch } from 'xregexp'
 export enum NameType {
   txt = 'txt', // 文本
   latex = 'latex', // latex符号
+  latexText = 'latexText', // latex符号
   special = 'special', // 换行符
   between = 'between',
 }

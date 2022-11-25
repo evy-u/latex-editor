@@ -12,11 +12,8 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["../src/*"]
-    },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": ["../src/**/*.ts", "../src/**/*.vue"],
-  "exclude": ["node_modules", "../package", "../types"],
+  "exclude": ["node_modules", "../package", "../types"]
 }

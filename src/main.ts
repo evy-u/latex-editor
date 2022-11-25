@@ -3,12 +3,15 @@ import ElementPlus from 'element-plus'
 
 import App from './App.vue'
 import router from './router'
+import 'tailwindcss/tailwind.css'
 import 'element-plus/theme-chalk/index.css'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
+import './style/vant.scss'
+import '@vant/touch-emulator'
 
 const app = createApp(App)
 app.use(ElementPlus, {
-	locale,
+  locale,
 })
 app.use(router).mount('#app')
 export default app

@@ -311,7 +311,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 showAfter: import("element-plus/es/utils/props").BuildPropReturn<NumberConstructor, number, unknown, unknown, unknown>;
             }>> & {
                 [x: string & `on${string}`]: ((...args: any[]) => any) | undefined;
-            } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "offset" | "content" | "popperStyle" | "popperClass" | "enterable" | "effect" | "style" | "openDelay" | "visibleArrow" | "hideAfter" | "showArrow" | "arrowOffset" | "disabled" | "trigger" | "virtualRef" | "virtualTriggering" | "appendTo" | "rawContent" | "persistent" | "visible" | "transition" | "teleported" | "className" | "pure" | "referenceEl" | "stopPopperMouseEvent" | "boundariesPadding" | "fallbackPlacements" | "gpuAcceleration" | "placement" | "popperOptions" | "strategy" | "showAfter">;
+            } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "offset" | "content" | "popperStyle" | "popperClass" | "enterable" | "effect" | "style" | "visible" | "openDelay" | "visibleArrow" | "hideAfter" | "showArrow" | "arrowOffset" | "disabled" | "trigger" | "virtualRef" | "virtualTriggering" | "appendTo" | "rawContent" | "persistent" | "transition" | "teleported" | "className" | "pure" | "referenceEl" | "stopPopperMouseEvent" | "boundariesPadding" | "fallbackPlacements" | "gpuAcceleration" | "placement" | "popperOptions" | "strategy" | "showAfter">;
             $attrs: {
                 [x: string]: unknown;
             };

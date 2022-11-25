@@ -37,7 +37,7 @@ function parseIndependentSign(textItem: SignItem, parseArr: SignItem[], parentNo
     const lineValue = textItem.__value.slice(textItem.value.indexOf(item) - 1, textItem.__value.indexOf(item))
     return textItem.__value.includes(item) && (lineValue === '\\' || item === '\n')
   })
-  console.log(signInTexts, 'signInTexts')
+  // console.log(signInTexts, 'signInTexts')
   if (signInTexts.length) {
     let matchArr = _.flatten(
       signInTexts.map(item => {
@@ -88,7 +88,7 @@ function parseIndependentSign(textItem: SignItem, parseArr: SignItem[], parentNo
       }
       parseArr.push({
         __id: __uniqueId++,
-        name: item.value === '\n' ? NameType.special : NameType.latex,
+        name: item.value === '\n' ? NameType.special : NameType.latexText,
         value: item.value,
         __value: item.value,
         start: item.start,
@@ -148,32 +148,32 @@ export function parseStrRecursive(str: string, parentNode?: SignItem) {
       __parseArr.push(__item)
     }
   } else {
-    console.log('matchArr', JSON.parse(JSON.stringify(matchArr)))
+    // console.log('matchArr', JSON.parse(JSON.stringify(matchArr)), parentNode)
     matchArr.forEach((item, index) => {
       // console.log(item, '888')
       let nowValue = item.value
       if (item.name === 'between') {
-        // console.log(11, Object.assign({}, parentNode))
         let prevObj = Object.assign({}, matchArr[index - 1]) //上一个元素
         let preObjValue = prevObj.value || ''
         const prevObjLastStrs = preObjValue.split('\\')
         const prevObjLastStr = prevObjLastStrs.pop() || '' // latex关键字
+        // console.log('8989', prevObjLastStr)
         let nextObj = matchArr[index + 1] //下一个元素
         let isBracketSign = signTypeValidate(bracketSignList, prevObjLastStr) // 是否是带有括号的latex
         if (preObjValue.slice(-1) === '^' || isBracketSign) {
           item.name = NameType.latex
           parentNode && (item.parentNode = parentNode)
+          // console.log(22, Object.assign({}, item), Object.assign({}, parentNode))
 
           if (preObjValue.slice(-1) === '^') {
             // 最后一位是^
-            // 如果是^
             prevObj.__value = prevObj.value
             prevObj.value = preObjValue.slice(0, -1) /// 剔除掉最后一位
             prevObj.name = NameType.txt
             item.__value = `^{${item.__value}}`
             item.value = `^`
           } else {
-            // 如果是oneBracketList中的元素
+            // 最后一位是oneBracketList中的元素
             prevObj.value = prevObjLastStrs.join('\\')
             prevObj.__value = prevObj.value
             prevObj.name = NameType.txt
@@ -184,13 +184,15 @@ export function parseStrRecursive(str: string, parentNode?: SignItem) {
             item.value = `\\${prevObjLastStr}`
             item.start = item.start - item.value.length - 1
             item.end = calcIndex(item.start, item.value)
-            item.__start = calcIndex(parentNode?.__start || 0 + item.start)
+            item.__start = calcIndex((parentNode ? parentNode.end + 1 : 0) + item.start)
             item.__end = calcIndex(item.__start, item.__value)
 
             if (!parseIndependentSign(prevObj, __parseArr, prevObj.parentNode) && prevObj.value) {
+              // console.log('prevObj', Object.assign({}, prevObj), Object.assign({}, parentNode))
               prevObj.end = calcIndex(prevObj.start, prevObj.value)
-              prevObj.__start = calcIndex(prevObj.start + (parentNode?.start || 0))
+              prevObj.__start = calcIndex(prevObj.start + (parentNode ? parentNode.end + 1 : 0))
               prevObj.__end = calcIndex(prevObj.__start, prevObj.__value)
+              prevObj.parentNode = parentNode
               !prevObj.__id && (prevObj.__id = __uniqueId++)
               __parseArr.push(prevObj)
             }
@@ -203,7 +205,7 @@ export function parseStrRecursive(str: string, parentNode?: SignItem) {
               }
               let keys = Object.keys(item?.brackets || {})
               item.brackets[keys.length] = parseStrRecursive(`{${nowValue}}`, Object.assign({}, item))
-              // console.log(333, Object.assign({}, item.brackets))
+              console.log(333, Object.assign({}, item))
             } else {
               // 只是纯文本
               let __start = calcIndex((item?.end || 0) + 1)
@@ -242,27 +244,31 @@ export function parseStrRecursive(str: string, parentNode?: SignItem) {
               item.brackets[keys.length] = parseStrRecursive(lsValue, Object.assign({}, item))
             }
           }
+
           item.__end = calcIndex(item.__start, item.__value)
           !item.__id && (item.__id = __uniqueId++)
           item.value && __parseArr.push(item)
+        } else {
+          // console.log(11, item)
+          item.__value = item.value
+          item.start--
+          item.end--
+          item.parentNode = parentNode
+          item.name = NameType.latex
+          item.__start = calcIndex(item.start + (parentNode?.__start || 0))
+          item.__end = calcIndex(item.__start, item.__value)
+          item.parentNode = item
+          // console.log(11, item)
+          // parseStrRecursive(item.value, item)
+          // console.log(11, parentNode)
+          __parseArr.push(...parseStrRecursive(item.value, parentNode))
         }
-        // else {
-        //   item.__value = item.value
-        //   item.start--
-        //   item.end--
-        //   item.__start = calcIndex(item.start + (parentNode?.start || 0))
-        //   item.__end = calcIndex(item.__start, item.__value)
-        //   item.parentNode = parentNode
-        //   if (!parseIndependentSign(item, __parseArr, parentNode) && item.value) {
-        //     !item.__id && (prevObj.__id = __uniqueId++)
-        //     __parseArr.push(item)
-        //   }
-        // }
       }
       if (!item.value.includes('\\') && !signTypeValidate(noDoubleLines, item.value) && item.value) {
         item.name = NameType.txt
         item.__value = item.value
         item.end = calcIndex(item.start, item.value)
+        item.parentNode = parentNode
         if (parentNode) {
           item.start = 0
           item.end = calcIndex(0 - 1, item.value)

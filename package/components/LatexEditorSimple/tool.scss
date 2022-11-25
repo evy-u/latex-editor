@@ -1,0 +1,100 @@
+.latex-tool {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 4px;
+  .formula-type-container {
+    padding-top: 20px;
+  }
+  .formula-type {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-left: 40px;
+    margin-bottom: 20px;
+    padding: 0.5rem 0.75rem;
+    color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    img {
+      height: 24px;
+    }
+    .type-name {
+      margin-top: 8px;
+      text-align: center;
+    }
+  }
+  .formula-item-list {
+    position: absolute;
+    left: 50%;
+    top: 84px;
+    transform: translateX(-50%);
+    display: none;
+    padding: 8px 0px;
+    background: #fff;
+    border-radius: 4px;
+    min-width: 132px;
+    padding-left: 10px;
+    border: 1px solid #e4e7ed;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    &::before {
+      position: absolute;
+      top: -7px;
+      left: 48%;
+      width: 14px;
+      height: 14px;
+      z-index: -1;
+      content: ' ';
+      transform: rotate(45deg);
+      background: #fff;
+      box-sizing: border-box;
+      border-top: 1px solid #e4e7ed;
+      border-left: 1px solid #e4e7ed;
+    }
+  }
+  .formula-type-container:hover {
+    .formula-item-list {
+      display: block !important;
+    }
+  }
+  .formula-item {
+    color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 0.3rem 0.55rem 0.2rem;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+    img {
+      width: auto;
+      height: 20px;
+      margin-right: 4px;
+    }
+  }
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Ni8on-prefixed version, currently*/
+}
