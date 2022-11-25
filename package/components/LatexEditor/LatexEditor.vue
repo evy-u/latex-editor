@@ -21,7 +21,7 @@ const props = withDefaults(
 )
 
 const editRef = $ref<InstanceType<typeof HTMLDivElement>>() // 编辑框元素
-let editContent = $ref<string>('\\sqrt{66\\cos\\sqrt{3}}') // latex公式串 \\frac{}{}\\sin777\\sqrt{66\\cos}hh
+let editContent = $ref<string>('\\sqrt{11\\bar{v\\sqrt{5}}}22\\sqrt{66\\sqrt{3}}') // latex公式串 \\frac{}{}\\sin777\\sqrt{66\\cos}hh
 let signTree = $ref<SignItem[]>([]) // latex 公式树
 let editHtmlStr = $computed(() => {
   // latex HTML串
