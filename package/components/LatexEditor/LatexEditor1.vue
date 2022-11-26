@@ -49,6 +49,7 @@ watch(
 watch(
   () => [cursorInfo.cursorNode, editContent],
   () => {
+    if (!editRef) return
     observerNode(editRef, (selection: Selection | null) => {
       if (selection && selection?.anchorNode) {
         if (selection?.anchorNode.nodeType === 1) {

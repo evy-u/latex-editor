@@ -148,7 +148,7 @@ function getNodeByDeep(ele?: HTMLElement): HTMLElement | undefined {
 }
 
 //监听元素是否变化
-export async function observerNode(node?: HTMLElement, cb: (selection: Selection | null) => void) {
+export async function observerNode(node: HTMLElement, cb: (selection: Selection | null) => void) {
   if (!node) return
   const observer = new MutationObserver(function (mutationList) {
     mutationList.forEach(mutation => {

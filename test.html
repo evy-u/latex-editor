@@ -7,12 +7,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <link rel="icon" href="./favicon.ico" />
   <title>test-latex-editor</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="./dist/index.umd.js"></script>
+  <link rel="stylesheet" href="./dist/style.css">
+  <script src="./dist/init.module.js"></script>
 </head>
 
 <body>
-  222
+  <div class="latex-tool"></div>
+  <script>
+    const Tool = new latexTool({
+      container: '.latex-tool',
+      handleClickFormula: function (ev, signItem) {
+        console.log('signItem:', signItem)
+      }
+    })
+  </script>
 </body>
 
 </html>
