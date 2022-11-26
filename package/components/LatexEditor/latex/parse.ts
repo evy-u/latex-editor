@@ -88,7 +88,7 @@ function parseIndependentSign(textItem: SignItem, parseArr: SignItem[], parentNo
       }
       parseArr.push({
         __id: __uniqueId++,
-        name: item.value === '\n' ? NameType.special : NameType.latex,
+        name: item.value === '\n' ? NameType.special : NameType.latexText,
         value: item.value,
         __value: item.value,
         start: item.start,

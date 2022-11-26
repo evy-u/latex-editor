@@ -2,6 +2,7 @@ import { type MatchRecursiveValueNameMatch } from 'xregexp';
 export declare enum NameType {
     txt = "txt",
     latex = "latex",
+    latexText = "latexText",
     special = "special",
     between = "between"
 }

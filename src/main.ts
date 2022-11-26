@@ -8,7 +8,7 @@ import locale from 'element-plus/lib/locale/lang/zh-cn'
 
 const app = createApp(App)
 app.use(ElementPlus, {
-	locale,
+  locale,
 })
 app.use(router).mount('#app')
 export default app
