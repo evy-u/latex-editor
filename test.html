@@ -8,19 +8,54 @@
   <link rel="icon" href="./favicon.ico" />
   <title>test-latex-editor</title>
   <link rel="stylesheet" href="./dist/style.css">
-  <script src="./dist/init.module.js"></script>
+  <script src="./dist/latex-editor.module.js"></script>
 </head>
 
 <body>
   <div class="latex-tool"></div>
+  <div class="latex-input"></div>
+  <div class="latex-output"></div>
   <script>
+
+    const Output = new latexOutput({
+      container: '.latex-output',
+      config: {
+        // display: 'block',
+        // globalRender: false,
+        // lineHeight: '20px',
+        // punctuation: false,
+        textColor: '#f99',
+        // lineClass: false,
+        divideChinese: true,
+      }
+    })
+
+    const Input = new latexInput({
+      container: '.latex-input',
+      contentChange: function (content) {
+        console.log('content:', content)
+        Output.setContent(content)
+      }
+    })
+
+
+
     const Tool = new latexTool({
       container: '.latex-tool',
-      handleClickFormula: function (ev, signItem) {
-        console.log('signItem:', signItem)
+      handleClickFormula: function (ev, signItem) { // 点击公式
+        // console.log('signItem:', ev, signItem)
+        if (!signItem) {
+          throw new Error('错误：请联系管理员')
+        }
+        Input.setCursorPosition(signItem)
       }
     })
   </script>
 </body>
+<style>
+  .latex-output {
+    height: 300px;
+  }
+</style>
 
 </html>

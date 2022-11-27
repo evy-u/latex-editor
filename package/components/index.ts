@@ -1,3 +1,3 @@
-import LatexEditor from './LatexEditor/LatexEditor1.vue'
+import LatexEditor from './LatexEditor/LatexEditor.vue'
 
 export { LatexEditor }

@@ -1,16 +1,19 @@
 <template>
-  <Tool v-if="isTool" :editRef="editRef" @handleClickFormula="handleClickFormula"></Tool>
-  <div contenteditable="true" class="editor-content" ref="editRef" v-bind:innerHTML="editHtmlStr"></div>
+  <Tool v-if="isTool" @handleClickFormula="handleClickFormula"></Tool>
+  <div contenteditable="true" class="editor-content" ref="editRef"></div>
   <div>{{ editContent }}</div>
-  {{ editContent.length }}
+  <div>
+    <KeMathJax :content="editContent" lineHeight="20px" class="latex-container"></KeMathJax>
+  </div>
 </template>
 <script setup lang="ts">
 import Tool from './components/tool/Tool.vue'
-
 import { withDefaults, defineProps, watch, onMounted, nextTick } from 'vue'
-import { setSelectionRange, insertContent, contentToHtml, getNodeByDeep, getNodeIdByDeep, getCursorInfo, CursorInfo } from './utils'
+import { setSelectionRange, CursorInfo, insertNode, observerNode } from './utils'
 import { FormulaItem } from './components/tool/formula'
-import { SignItem, NameType } from './latex/type'
+import { KeMathJax } from 'learnable-lib'
+import 'learnable-lib/dist/style.css'
+
 const props = withDefaults(
   defineProps<{
     isTool?: boolean
@@ -19,82 +22,68 @@ const props = withDefaults(
     isTool: true,
   }
 )
-
+let editContent = $ref('') // latex公式串 \\frac{}{}\\sin777\\sqrt{66\\cos}hh
 const editRef = $ref<InstanceType<typeof HTMLDivElement>>() // 编辑框元素
-let editContent = $ref<string>('\\sqrt{11\\bar{v\\sqrt{5}}}22\\sqrt{66\\sqrt{3}}') // latex公式串 \\frac{}{}\\sin777\\sqrt{66\\cos}hh
-let signTree = $ref<SignItem[]>([]) // latex 公式树
-let editHtmlStr = $computed(() => {
-  // latex HTML串
-  const { resultHtml, contentTree } = contentToHtml(editContent)
-  signTree = contentTree
-  return resultHtml
-})
-
 let cursorInfo = $ref<CursorInfo>({
   cursorNodeIndex: 0, // 光标在元素的index
-  cursorNode: null, // 光标所在的元素(直接父元素，包含Text型元素)
+  cursorNode: editRef, // 光标所在的元素(直接父元素，包含Text型元素)
   cursorContentIndex: 0, // 光标在editContent中的index
   currentNodeId: 0, // 光标所在节点的id
 })
 
+onMounted(() => {
+  cursorInfo.cursorNode = editRef as HTMLElement
+})
 watch(
-  () => signTree,
+  () => cursorInfo,
   () => {
-    nextTick(() => {
-      if (editRef && !cursorInfo?.cursorNodeIndex !== null) {
-        setDefaultCursorPosition()
-      }
-      if (editRef && cursorInfo?.cursorNodeIndex !== null) {
-        if (!cursorInfo?.currentNodeId) return
-        const node = getNodeIdByDeep(signTree, String(cursorInfo.currentNodeId))
-        if (!node) return
-        cursorInfo = getCursorInfo(node)
-        if (cursorInfo && cursorInfo!.cursorNode) {
-          setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
-        }
-      }
-    })
+    console.log('cursorInfo:', cursorInfo)
+  },
+  {
+    deep: true,
   }
 )
 
-onMounted(() => {
-  // observerNode(editRef)
-})
+watch(
+  () => [cursorInfo.cursorNode, editContent],
+  () => {
+    if (!editRef) return
+    observerNode(editRef, (selection: Selection | null) => {
+      if (selection && selection?.anchorNode) {
+        if (selection?.anchorNode.nodeType === 1) {
+          if (selection?.anchorNode.childNodes[0]?.nodeName === 'BR') {
+            selection?.anchorNode.removeChild(selection?.anchorNode.childNodes[0])
+          }
+          cursorInfo.cursorNode = selection.anchorNode as HTMLElement
+          cursorInfo.cursorNodeIndex = selection.anchorOffset
+        } else {
+          cursorInfo.cursorNode = editRef
+          cursorInfo.cursorNodeIndex = 0
+        }
+        setEditContent()
+      }
+    })
+  },
+  {
+    immediate: true,
+  }
+)
 
 // 点击公式
 function handleClickFormula(dataItem: FormulaItem) {
   const { formula } = dataItem
-  editContent = insertContent(editContent, formula, cursorInfo!.cursorContentIndex)
-}
-
-/**
- * @description  默认光标位置
- *
- * 如果最后一个元素带括号，默认光标在最后一个括号里的最后一位
- * 否则，默认光标在editRef的最后一位
- */
-function setDefaultCursorPosition() {
-  const lastItem = getNodeByDeep(editRef) as HTMLElement // 最后一个元素
-  // console.log('lastItem:', lastItem, lastItem?.className.split('-')[1])
-  if (lastItem?.className.includes('lx-') || lastItem?.className.includes('tx-')) {
-    const node = getNodeIdByDeep(signTree, lastItem?.className.split('-')[1])
-    if (!node) {
-      setCursorEnd()
-      return
-    }
-    cursorInfo = getCursorInfo(node)
-    // console.log('cursorInfo:', cursorInfo)
-    if (cursorInfo) {
-      setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
-    }
-  } else {
-    setCursorEnd()
+  const __cursorInfo = insertNode(formula, cursorInfo!.cursorNode)
+  console.log('handleClickFormula: ', __cursorInfo)
+  if (__cursorInfo) {
+    cursorInfo.cursorNode = __cursorInfo.cursorNode
+    cursorInfo.cursorNodeIndex = __cursorInfo.cursorIndex
+    setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
   }
+  setEditContent()
 }
 
-function setCursorEnd() {
-  cursorInfo!.cursorNode = editRef
-  setSelectionRange(cursorInfo!.cursorNode)
+function setEditContent() {
+  editContent = editRef?.innerText || ''
 }
 </script>
 <style scoped lang="scss">

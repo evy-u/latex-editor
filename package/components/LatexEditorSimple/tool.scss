@@ -8,6 +8,8 @@
     position: relative;
     margin-left: 40px;
     margin-bottom: 20px;
+    padding: 14px 0;
+    text-align: center;
     img {
       height: 24px;
     }
@@ -16,7 +18,7 @@
     display: none;
     position: absolute;
     left: 0;
-    padding: 8px 20px;
+    padding: 8px 0px;
     background: #fff;
     color: #840994;
   }
@@ -26,14 +28,22 @@
     }
   }
   .formula-item {
-    width: 80px;
+    min-width: 80px;
     cursor: pointer;
     display: flex;
-    align-content: center;
+    align-items: center;
+
     height: 42px;
-    line-height: 42px;
+    padding: 0 16px;
+    &:hover {
+      background: #3815ac4a;
+    }
     img {
       height: 20px;
+    }
+    .formula-name {
+      margin-left: 8px;
+      white-space: nowrap;
     }
   }
 }

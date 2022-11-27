@@ -6,26 +6,27 @@
   "module": "./dist/index.es.js",
   "scripts": {
     "husky": "husky install",
-    "build": "vite build -c viteconfig.lib.build.ts",
+    "build": "vite build -c viteconfig.lib.build.simple.ts",
+    "build-dev": "vite build -c viteconfig.lib.build.ts",
     "dev": "vite --mode development"
   },
   "repository": "",
   "author": "xhy",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.21",
-    "uid": "^2.0.0",
-    "xregexp": "^5.1.1",
+    "chalk": "^5.0.0",
     "element-plus": "^1.3.0-beta.5",
+    "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.168",
+    "lodash": "^4.17.21",
     "rollup-plugin-uglify": "^6.0.4",
     "sass": "^1.46.0",
     "typescript": "^4.7.2",
+    "uid": "^2.0.0",
     "vite": "^2.9.9",
     "vite-plugin-dts": "^1.2.0",
     "vue": "^3.2.26",
     "vue-router": "^4.0.12",
-    "chalk": "^5.0.0",
-    "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.168"
+    "xregexp": "^5.1.1"
   },
   "devDependencies": {
     "@rollup/plugin-strip": "^2.1.0",
