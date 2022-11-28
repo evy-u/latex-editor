@@ -15,16 +15,16 @@
     }
   }
   .formula-item-list {
-    display: none;
     position: absolute;
     left: 0;
+    display: none;
     padding: 8px 0px;
     background: #fff;
     color: #840994;
   }
   .formula-type:hover {
     .formula-item-list {
-      display: block;
+      display: block !important;
     }
   }
   .formula-item {
@@ -46,4 +46,20 @@
       white-space: nowrap;
     }
   }
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+
+  -khtml-user-select: none; /* Konqueror */
+
+  -moz-user-select: none; /* Firefox */
+
+  -ms-user-select: none; /* Internet Explorer/Edge */
+
+  user-select: none; /* Non-prefixed version, currently
+
+not supported by any browser */
 }

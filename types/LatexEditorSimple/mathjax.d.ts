@@ -10,3 +10,4 @@ declare global {
 }
 export declare function setMathJaxConfig(mathJaxConfig?: Record<string, any>): void;
 export declare function renderLatex(ele: HTMLElement): Promise<any>;
+export declare function htmlToImageBase64(ele?: HTMLDivElement): Promise<string>;

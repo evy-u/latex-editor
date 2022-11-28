@@ -16,6 +16,7 @@
   "dependencies": {
     "chalk": "^5.0.0",
     "element-plus": "^1.3.0-beta.5",
+    "html2canvas": "^1.4.1",
     "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.168",
     "lodash": "^4.17.21",
     "rollup-plugin-uglify": "^6.0.4",

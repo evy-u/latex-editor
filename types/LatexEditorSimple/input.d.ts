@@ -8,9 +8,11 @@ declare class LatexInput {
     private editContent;
     private cursorInfo;
     private contentChange;
+    private isChangeCursor;
     constructor(parameters: LatexInputParam);
     init(): void;
     observerContentChange(selection: Selection | null): void;
+    getSelectionInfo(): void;
     setCursorPosition(dataItem: FormulaItem): void;
     setEditContent(): void;
 }

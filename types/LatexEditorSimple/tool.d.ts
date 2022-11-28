@@ -10,5 +10,6 @@ declare class LatexTool {
     init(): void;
     createFormulesDom(): string;
     listenFormulaItemClick(cb: any): void;
+    hidden(): void;
 }
 export default LatexTool;

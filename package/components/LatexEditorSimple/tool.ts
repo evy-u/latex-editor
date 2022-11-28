@@ -25,19 +25,25 @@ class LatexTool {
       this.container.appendChild(child)
     })
     this.listenFormulaItemClick(this.handleClickFormula)
+    // Array.from(document.querySelectorAll('.formula-item-type')).forEach(item => {
+    //   item.addEventListener('mouseenter', () => {
+    //     globalThis.latexInput.cursorInfo =
+    //   })
+    // })
   }
 
   createFormulesDom(): string {
     let htmlResult = ''
     for (let i = 0; i < formulas.length; i++) {
+      htmlResult += '<el-popper></el-popper>'
       htmlResult += '<div class="formula-type">'
 
       htmlResult += `<img src="${formulas[i].icon}"/>`
       htmlResult += `<div class="type-name">${formulas[i].name}</div>`
 
-      htmlResult += '<div class="formula-item-list">'
+      htmlResult += '<div class="formula-item-list noselect">'
       for (let j = 0; j < formulas[i].data.length; j++) {
-        htmlResult += `<div class="formula-item" sign="${formulas[i].data[j].formula}">`
+        htmlResult += `<div class="formula-item" sign="${formulas[i].data[j].formula}" >`
         htmlResult += `<img src="${formulas[i].data[j].icon}" sign="${formulas[i].data[j].formula}"/>`
         htmlResult += `<div class="formula-name" sign="${formulas[i].data[j].formula}">${formulas[i].data[j].name}</div>`
         htmlResult += '</div>'
@@ -63,6 +69,12 @@ class LatexTool {
 
         cb(e, signItem)
       }
+    })
+  }
+
+  hidden() {
+    Array.from(document.querySelectorAll('.formula-item-list')).forEach(item => {
+      item.style.display = 'none'
     })
   }
 }

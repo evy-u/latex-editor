@@ -1,5 +1,5 @@
 import { FormulaItem } from '../LatexEditor/components/tool/formula'
-import { insertNode, observerNode, setSelectionRange } from '../LatexEditor/utils'
+import { insertNode, observerNode, setSelectionRange, getSelection } from '../LatexEditor/utils'
 import './input.scss'
 
 interface LatexInputParam {
@@ -18,6 +18,7 @@ class LatexInput {
     cursorNodeIndex: 0,
   }
   private contentChange: (content: string) => void
+  private isChangeCursor = true
   constructor(parameters: LatexInputParam) {
     this.container = document.querySelector(parameters.container) as HTMLDivElement
     if (!this.container) {
@@ -33,10 +34,14 @@ class LatexInput {
     this.container.classList.add('latex-editor-content')
     this.cursorInfo.cursorNode = this.container
     observerNode(this.container, this.observerContentChange.bind(this))
+    this.container.addEventListener('click', () => {
+      this.isChangeCursor = true
+      this.getSelectionInfo()
+    })
   }
 
   observerContentChange(selection: Selection | null) {
-    if (selection && selection?.anchorNode) {
+    if (selection && selection?.anchorNode && this.isChangeCursor) {
       if (selection?.anchorNode.nodeType === 1) {
         if (selection?.anchorNode.childNodes[0]?.nodeName === 'BR') {
           selection?.anchorNode.removeChild(selection?.anchorNode.childNodes[0])
@@ -51,9 +56,21 @@ class LatexInput {
     }
   }
 
+  getSelectionInfo() {
+    const result = getSelection(this.isChangeCursor)
+    if (result) {
+      this.cursorInfo.cursorNode = result.cursorNode
+      this.cursorInfo.cursorNodeIndex = result.cursorNodeIndex
+      setSelectionRange(this.cursorInfo.cursorNode, this.cursorInfo.cursorNodeIndex, this.cursorInfo.cursorNodeIndex)
+    }
+  }
+
   setCursorPosition(dataItem: FormulaItem) {
+    this.isChangeCursor = true
     const { formula } = dataItem
-    const __cursorInfo = insertNode(formula, this.cursorInfo!.cursorNode)
+    this.getSelectionInfo()
+
+    const __cursorInfo = insertNode(formula, this.cursorInfo!.cursorNode, this.cursorInfo.cursorNodeIndex)
     if (__cursorInfo) {
       this.cursorInfo.cursorNode = __cursorInfo.cursorNode
       this.cursorInfo.cursorNodeIndex = __cursorInfo.cursorIndex

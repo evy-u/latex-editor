@@ -20,5 +20,6 @@ declare class LatexOupt {
     constructor(parameters: LatexOutputParam);
     init(): void;
     setContent(content: string): void;
+    latexToImage(): Promise<unknown>;
 }
 export default LatexOupt;

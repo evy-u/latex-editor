@@ -36,7 +36,8 @@ export function downloadImg(url: string) {
 // 插入节点
 export function insertNode(
   str: string,
-  parentNode: HTMLElement | undefined
+  parentNode: HTMLElement | undefined,
+  nodeIndex: number
 ): {
   cursorNode: HTMLElement | undefined
   cursorIndex: number
@@ -44,7 +45,7 @@ export function insertNode(
   const { contentTree, resultHtml } = contentToHtml(str)
   const child = new DOMParser().parseFromString(resultHtml, 'text/html').querySelector('body')?.children[0] as HTMLElement
   if (child) {
-    child && parentNode?.appendChild(child)
+    parentNode && parentNode.insertBefore(child, parentNode?.childNodes[nodeIndex])
     const deepNode = getNodeByDeep(child) as HTMLElement
     const signNode = getNodeIdByDeep(contentTree, deepNode?.className.split('-')[1] || '')
     if (signNode?.name === NameType.txt) {
@@ -176,53 +177,38 @@ export async function observerNode(node: HTMLElement, cb: (selection: Selection 
 export type CursorInfo = {
   cursorNode: HTMLElement | undefined
   cursorNodeIndex: number
-  cursorContentIndex: number
-  currentNodeId: number
 }
 
-/**
- *
- * 如果 cursorNode 是文字节点，那么cursorNodeIndex就是从该文字节点的第一个字开始，直到被选中的第一个字之间的字数（如果第一个字就被选中，那么偏移量为零）再加上被选中文字的长度。
- * 如果 cursorNode 是一个元素，那么cursorNodeIndex就是在选区最后一个节点的同级节点总数的下标。(这些节点都是 cursorNode 的子节点)
- */
-// export function getCursorInfo(node: SignItem): CursorInfo {
-//   // console.log('node-signItem:', Object.assign({}, node))
-//   let cursorNode: HTMLElement | null = null
-//   let cursorNodeIndex = 0
-//   let cursorContentIndex = 0
-//   let currentNodeId = 0
-//   if (node.name === NameType.txt) {
-//     // 文本型节点
-//     cursorNode = document.querySelector(`.tx-${node.__id}`) as HTMLDivElement
-//     cursorNodeIndex = node.end
-//     cursorContentIndex = node.__end
-//     currentNodeId = node.__id
-//   } else {
-//     if (!node.brackets) {
-//       cursorNode = document.querySelector(`.lx-${node.__id}`) as HTMLElement
-//       cursorNodeIndex = node.end
-//       cursorContentIndex = node.__end
-//       // console.log('cursorNode.childNodes', cursorNode.childNodes)
-//       if (cursorNode.childNodes.length) {
-//         const lastChildTextNode = Array.from(cursorNode.childNodes).slice(-1)[0] as Text
-//         if (lastChildTextNode?.nodeName === '#text') {
-//           // 文本型节点
-//           currentNodeId = node.__id
-//           cursorNode = lastChildTextNode as unknown as HTMLElement
-//           cursorNodeIndex = lastChildTextNode.length
-//           // console.log(cursorContentIndex, node.value.length)
-//           cursorContentIndex = cursorContentIndex + node.value.length
-//         }
-//       }
-//     }
-//   }
-
-//   console.log('currentNodeId:', currentNodeId, 'cursorNode:', cursorNode, 'cursorNodeIndex:', cursorNodeIndex, 'cursorContentIndex:', cursorContentIndex)
-
-//   return {
-//     cursorNode: cursorNode as HTMLElement,
-//     cursorNodeIndex,
-//     cursorContentIndex,
-//     currentNodeId,
-//   }
-// }
+export function getSelection(isChangeCursor: boolean):
+  | (CursorInfo & {
+      isChangeCursor: boolean
+    })
+  | null {
+  const selection = window.getSelection()
+  if (selection && selection.anchorNode) {
+    let cursorInfo = {
+      cursorNodeIndex: 0,
+      cursorNode: undefined,
+    }
+    if (selection?.anchorNode.nodeType === 3) {
+      const { anchorOffset } = selection
+      Array.from(selection.anchorNode.parentNode?.childNodes || []).forEach((child, index) => {
+        if (selection.containsNode(child, true)) {
+          isChangeCursor = false
+          child.splitText(anchorOffset)
+          cursorInfo.cursorNodeIndex = index + 1
+          cursorInfo.cursorNode = selection.anchorNode!.parentNode || undefined
+          // setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
+        }
+      })
+    } else if (selection?.anchorNode.nodeType === 1) {
+      cursorInfo.cursorNode = selection?.anchorNode
+      cursorInfo.cursorNodeIndex = selection?.anchorOffset
+    }
+    return {
+      ...cursorInfo,
+      isChangeCursor,
+    }
+  }
+  return null
+}

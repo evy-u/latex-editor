@@ -12,49 +12,68 @@
 </head>
 
 <body>
+  <div>
+    <button onclick="getImage()">获取图片</button>
+  </div>
   <div class="latex-tool"></div>
   <div class="latex-input"></div>
   <div class="latex-output"></div>
+  <div>
+    <img class="latex-image">
+  </div>
   <script>
 
     const Output = new latexOutput({
       container: '.latex-output',
       config: {
-        // display: 'block',
-        // globalRender: false,
-        // lineHeight: '20px',
-        // punctuation: false,
-        textColor: '#f99',
-        // lineClass: false,
-        divideChinese: true,
+        display: 'block',
+        lineHeight: '30px',
       }
     })
 
     const Input = new latexInput({
       container: '.latex-input',
       contentChange: function (content) {
-        console.log('content:', content)
+        // console.log('content:', content)
         Output.setContent(content)
       }
     })
+
+    console.log(0, Input.cursorInfo)
 
 
 
     const Tool = new latexTool({
       container: '.latex-tool',
       handleClickFormula: function (ev, signItem) { // 点击公式
-        // console.log('signItem:', ev, signItem)
+        // console.log('signItem:', signItem)
         if (!signItem) {
           throw new Error('错误：请联系管理员')
         }
+        Tool.hidden()
         Input.setCursorPosition(signItem)
       }
     })
+
+    function getImage() {
+      Output.latexToImage().then(url => {
+        // console.log(url)
+        const imageEle = document.querySelector('.latex-image')
+        imageEle.setAttribute('src', url)
+      })
+    }
   </script>
 </body>
+
 <style>
   .latex-output {
     height: 300px;
+  }
+
+  .latex-image {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 </style>
 

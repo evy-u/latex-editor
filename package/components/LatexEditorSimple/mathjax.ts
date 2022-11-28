@@ -1,4 +1,6 @@
 import { mathJaxConfig, mathJaxScriptBaseUrl } from 'learnable-lib'
+import html2canvas from 'html2canvas'
+
 export type MathJaxObject = {
   [x: string]: any
   tex2chtmlPromise: (input: string) => Promise<HTMLElement>
@@ -67,5 +69,18 @@ export function setMathJaxConfig(mathJaxConfig?: Record<string, any>) {
 export function renderLatex(ele: HTMLElement) {
   return addMathJaxScript().then(() => {
     return MathJax.typesetPromise()
+  })
+}
+
+export function htmlToImageBase64(ele?: HTMLDivElement): Promise<string> {
+  if (!ele) {
+    alert(ele)
+    throw new Error('ele 不存在')
+  }
+  return new Promise(resolve => {
+    html2canvas(ele).then(canvas => {
+      const url = canvas.toDataURL('image/png')
+      resolve(url)
+    })
   })
 }

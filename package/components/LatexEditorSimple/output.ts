@@ -1,7 +1,6 @@
-import { renderLatex, setMathJaxConfig } from './mathjax'
-import 'learnable-lib/dist/style.css'
+import { renderLatex, setMathJaxConfig, htmlToImageBase64 } from './mathjax'
 import { transformer } from 'learnable-lib'
-console.log(transformer, '33')
+import './output.scss'
 
 interface LatexOutputConfig {
   display?: 'block' | 'inline-block'
@@ -50,6 +49,14 @@ class LatexOupt {
     const innerHtml = transformer(this.content, __config)
     this.container.innerHTML = __config.divideChinese ? innerHtml : `$$${innerHtml}$$`
     renderLatex(this.container)
+  }
+
+  latexToImage() {
+    return new Promise(resolve => {
+      htmlToImageBase64(this.container).then(base64 => {
+        resolve(base64)
+      })
+    })
   }
 }
 
