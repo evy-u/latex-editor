@@ -1,3 +1,4 @@
+export declare const fontIconBaseUrl = "https://homework-webfront.oss-cn-beijing.aliyuncs.com/LatexIcon/";
 export interface FormulaItem {
     name: string;
     icon: string;

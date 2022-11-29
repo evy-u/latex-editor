@@ -9,6 +9,6 @@ export declare type CursorInfo = {
     cursorNode: HTMLElement | undefined;
     cursorNodeIndex: number;
 };
-export declare function getSelection(isChangeCursor: boolean): (CursorInfo & {
+export declare function getSelection(isChangeCursor: boolean, editRef: HTMLDivElement): (CursorInfo & {
     isChangeCursor: boolean;
 }) | null;

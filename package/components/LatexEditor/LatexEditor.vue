@@ -60,21 +60,22 @@ onMounted(() => {
     }
   })
 })
-watch(
-  () => cursorInfo,
-  () => {
-    // console.log('cursorInfo:', cursorInfo)
-  },
-  {
-    deep: true,
-  }
-)
+// watch(
+//   () => cursorInfo,
+//   () => {
+//     // console.log('cursorInfo:', cursorInfo)
+//   },
+//   {
+//     deep: true,
+//   }
+// )
 
 // 点击公式
 function handleClickFormula(dataItem: FormulaItem) {
+  if (!editRef) return
   isChangeCursor = true
   const { formula } = dataItem
-  const result = getSelection(isChangeCursor)
+  const result = getSelection(isChangeCursor, editRef)
   if (result) {
     cursorInfo.cursorNode = result.cursorNode
     cursorInfo.cursorNodeIndex = result.cursorNodeIndex
@@ -94,6 +95,7 @@ function setEditContent() {
   editContent = editRef?.innerText || ''
 }
 </script>
+
 <style scoped lang="scss">
 .editor-content {
   box-sizing: border-box;

@@ -82,17 +82,17 @@ function getRecursiveHtml(contentTree: SignItem[]): string {
   let resultHtml = ''
   contentTree.forEach(item => {
     if (item.name === NameType.latex) {
-      resultHtml += `<span class='${item.brackets ? 'bracket' : ''} lx-${item.__id}' style='color:${item.brackets ? '#008de9' : '#eb1e1e'};'>${item.value}`
+      resultHtml += `<span class='${item.brackets ? 'bracket' : ''} lx-${item.__id}' >${item.value}` //style='color:${item.brackets ? '#008de9' : '#eb1e1e'};'
       if (item.brackets) {
         for (const key in item.brackets) {
-          resultHtml += `<span style='color:#608b4e;'>{</span>`
+          resultHtml += `<span>{</span>` // style='color:#608b4e;'
           resultHtml += getRecursiveHtml(item.brackets[key])
-          resultHtml += `<span style='color:#608b4e;'>}</span>`
+          resultHtml += `<span>}</span>` // style='color:#608b4e;'
         }
       }
       resultHtml += '</span>'
     } else {
-      resultHtml += `<span class='tx-${item.__id}' style='color:#d9822b;'>${item.value}</span>`
+      resultHtml += `<span class='tx-${item.__id}' >${item.value}</span>` // style='color:#d9822b;'
     }
   })
   return resultHtml
@@ -179,12 +179,18 @@ export type CursorInfo = {
   cursorNodeIndex: number
 }
 
-export function getSelection(isChangeCursor: boolean):
+export function getSelection(
+  isChangeCursor: boolean,
+  editRef: HTMLDivElement
+):
   | (CursorInfo & {
       isChangeCursor: boolean
     })
   | null {
   const selection = window.getSelection()
+  if (!selection?.isCollapsed) {
+    return null
+  }
   if (selection && selection.anchorNode) {
     let cursorInfo = {
       cursorNodeIndex: 0,
@@ -205,10 +211,16 @@ export function getSelection(isChangeCursor: boolean):
       cursorInfo.cursorNode = selection?.anchorNode
       cursorInfo.cursorNodeIndex = selection?.anchorOffset
     }
-    return {
-      ...cursorInfo,
-      isChangeCursor,
+    if (cursorInfo.cursorNode) {
+      return {
+        ...cursorInfo,
+        isChangeCursor,
+      }
     }
   }
-  return null
+  return {
+    cursorNode: editRef,
+    cursorNodeIndex: 0,
+    isChangeCursor,
+  }
 }

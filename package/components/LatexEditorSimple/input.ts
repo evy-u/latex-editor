@@ -57,7 +57,7 @@ class LatexInput {
   }
 
   getSelectionInfo() {
-    const result = getSelection(this.isChangeCursor)
+    const result = getSelection(this.isChangeCursor, this.container)
     if (result) {
       this.cursorInfo.cursorNode = result.cursorNode
       this.cursorInfo.cursorNodeIndex = result.cursorNodeIndex
