@@ -22,15 +22,12 @@
     <img class="latex-image">
   </div>
   <script>
-
+    // 输出
     const Output = new latexOutput({
       container: '.latex-output',
-      config: {
-        display: 'block',
-        lineHeight: '30px',
-      }
     })
 
+    // 输入
     const Input = new latexInput({
       container: '.latex-input',
       contentChange: function (content) {
@@ -39,18 +36,14 @@
       }
     })
 
-    console.log(0, Input.cursorInfo)
-
-
-
+    // 工具栏
     const Tool = new latexTool({
       container: '.latex-tool',
       handleClickFormula: function (ev, signItem) { // 点击公式
         // console.log('signItem:', signItem)
-        if (!signItem) {
-          throw new Error('错误：请联系管理员')
-        }
-        Tool.hidden()
+        // if (!signItem) {
+        //   throw new Error('错误：请联系管理员')
+        // }
         Input.setCursorPosition(signItem)
       }
     })
