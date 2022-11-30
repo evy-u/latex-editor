@@ -15,7 +15,9 @@ export default defineConfig({
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
       external: [],
-      output: {},
+      output: {
+        dir: 'simple-demo',
+      },
     },
     terserOptions: {
       compress: {

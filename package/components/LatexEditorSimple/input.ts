@@ -34,9 +34,25 @@ class LatexInput {
     this.container.classList.add('latex-editor-content')
     this.cursorInfo.cursorNode = this.container
     observerNode(this.container, this.observerContentChange.bind(this))
+
     this.container.addEventListener('click', () => {
       this.isChangeCursor = true
       this.getSelectionInfo()
+    })
+
+    this.container.addEventListener('keyup', ev => {
+      if (ev.code.toLocaleLowerCase() === 'enter') {
+        // const __cursorInfo = Object.assign({}, this.cursorInfo)
+        // if (__cursorInfo.cursorNode) {
+        //   if (!__cursorInfo.cursorNode.parentElement?.style.height) {
+        //     this.cursorInfo.cursorNode!.parentNode!.style.height = '30px'
+        //   } else {
+        //     this.cursorInfo.cursorNode!.style.height = '30px'
+        //   }
+        // } else {
+        ;(this.container.childNodes[this.cursorInfo.cursorNodeIndex + 1] as HTMLElement).style.minHeight = '30px'
+        // }
+      }
     })
   }
 
@@ -57,8 +73,8 @@ class LatexInput {
   }
 
   getSelectionInfo() {
-    const result = getSelection(this.isChangeCursor, this.container)
-    if (result) {
+    const result = getSelection(this.isChangeCursor)
+    if (result && result.cursorNode) {
       this.cursorInfo.cursorNode = result.cursorNode
       this.cursorInfo.cursorNodeIndex = result.cursorNodeIndex
       setSelectionRange(this.cursorInfo.cursorNode, this.cursorInfo.cursorNodeIndex, this.cursorInfo.cursorNodeIndex)
@@ -66,6 +82,7 @@ class LatexInput {
   }
 
   setCursorPosition(dataItem: FormulaItem) {
+    if (!this.container) return
     this.isChangeCursor = true
     const { formula } = dataItem
     this.getSelectionInfo()

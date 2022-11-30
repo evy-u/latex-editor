@@ -179,10 +179,7 @@ export type CursorInfo = {
   cursorNodeIndex: number
 }
 
-export function getSelection(
-  isChangeCursor: boolean,
-  editRef: HTMLDivElement
-):
+export function getSelection(isChangeCursor: boolean):
   | (CursorInfo & {
       isChangeCursor: boolean
     })
@@ -195,18 +192,26 @@ export function getSelection(
     let cursorInfo = {
       cursorNodeIndex: 0,
       cursorNode: undefined,
-    }
+    } as Partial<CursorInfo>
     if (selection?.anchorNode.nodeType === 3) {
       const { anchorOffset } = selection
-      Array.from(selection.anchorNode.parentNode?.childNodes || []).forEach((child, index) => {
-        if (selection.containsNode(child, true)) {
-          isChangeCursor = false
-          child.splitText(anchorOffset)
-          cursorInfo.cursorNodeIndex = index + 1
-          cursorInfo.cursorNode = selection.anchorNode!.parentNode || undefined
-          // setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
-        }
-      })
+      if (anchorOffset > 0) {
+        Array.from(selection.anchorNode.parentNode?.childNodes || []).forEach((child, index) => {
+          if (selection.containsNode(child, true)) {
+            isChangeCursor = false
+            child.splitText(anchorOffset)
+            cursorInfo.cursorNodeIndex = index + 1
+            cursorInfo.cursorNode = selection.anchorNode!.parentNode
+          }
+        })
+      } else {
+        Array.from(selection.anchorNode.parentNode?.childNodes || []).forEach((child, index) => {
+          if (child === selection.anchorNode) {
+            cursorInfo.cursorNodeIndex = index
+            cursorInfo.cursorNode = selection.anchorNode!.parentNode
+          }
+        })
+      }
     } else if (selection?.anchorNode.nodeType === 1) {
       cursorInfo.cursorNode = selection?.anchorNode
       cursorInfo.cursorNodeIndex = selection?.anchorOffset
@@ -218,9 +223,5 @@ export function getSelection(
       }
     }
   }
-  return {
-    cursorNode: editRef,
-    cursorNodeIndex: 0,
-    isChangeCursor,
-  }
+  return null
 }

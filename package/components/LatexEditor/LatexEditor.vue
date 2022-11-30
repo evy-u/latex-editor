@@ -53,36 +53,40 @@ onMounted(() => {
   editRef!.addEventListener('click', () => {
     isChangeCursor = true
     const result = getSelection(isChangeCursor)
-    if (result) {
+    if (result && result.cursorNode) {
       cursorInfo.cursorNode = result.cursorNode
       cursorInfo.cursorNodeIndex = result.cursorNodeIndex
       setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
     }
   })
+  editRef.addEventListener('keyup', ev => {
+    if (ev.code.toLocaleLowerCase() === 'enter') {
+      // const __cursorInfo = Object.assign({}, cursorInfo)
+      // if (__cursorInfo.cursorNode) {
+      //   if (!__cursorInfo.cursorNode.parentElement?.style.height) {
+      //     cursorInfo.cursorNode.parentNode.style.height = '30px'
+      //   } else {
+      //     cursorInfo.cursorNode.style.height = '30px'
+      //   }
+      // } else {
+      ;(editRef.childNodes[cursorInfo.cursorNodeIndex + 1] as HTMLElement).style.minHeight = '30px'
+      // }
+    }
+  })
 })
-// watch(
-//   () => cursorInfo,
-//   () => {
-//     // console.log('cursorInfo:', cursorInfo)
-//   },
-//   {
-//     deep: true,
-//   }
-// )
 
 // 点击公式
 function handleClickFormula(dataItem: FormulaItem) {
   if (!editRef) return
   isChangeCursor = true
-  const { formula } = dataItem
-  const result = getSelection(isChangeCursor, editRef)
-  if (result) {
+  const result = getSelection(isChangeCursor)
+  if (result && result.cursorNode) {
     cursorInfo.cursorNode = result.cursorNode
     cursorInfo.cursorNodeIndex = result.cursorNodeIndex
     setSelectionRange(cursorInfo.cursorNode, cursorInfo.cursorNodeIndex, cursorInfo.cursorNodeIndex)
   }
+  const { formula } = dataItem
   const __cursorInfo = insertNode(formula, cursorInfo!.cursorNode, cursorInfo.cursorNodeIndex)
-  // console.log('handleClickFormula: ', Object.assign({}, __cursorInfo))
   if (__cursorInfo) {
     cursorInfo.cursorNode = __cursorInfo.cursorNode
     cursorInfo.cursorNodeIndex = __cursorInfo.cursorIndex
@@ -108,8 +112,12 @@ function setEditContent() {
   border-radius: 6px;
   font-family: Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
   font-size: 1.4rem;
-  div {
-    height: 20px;
+
+  span {
+    display: inline-block !important;
+  }
+  .txt-1 {
+    min-height: 30px;
   }
 }
 </style>
