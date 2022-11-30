@@ -6,7 +6,7 @@
   "module": "./dist/index.es.js",
   "scripts": {
     "husky": "husky install",
-    "build": "vite build -c viteconfig.lib.build.simple.ts",
+    "build": "vite build -c viteconfig.lib.build.simple.ts && cp simple-dist/* demo",
     "build-dev": "vite build -c viteconfig.lib.build.ts",
     "dev": "vite --mode development"
   },
