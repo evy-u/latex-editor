@@ -1,15 +1,9 @@
-import { FormulaTypeItem, FormulaItem } from './formula/index';
-import { nextTick } from 'vue';
-declare const _sfc_main: import("vue").DefineComponent<{
-    editRef: {
-        type: ObjectConstructor;
-        required: false;
-    };
-}, {
-    props: any;
+import { FormulaItem } from './formula/index';
+declare const _sfc_main: import("vue").DefineComponent<{}, {
     emits: (event: 'handleClickFormula', param: FormulaItem) => void;
     handleClickFormula: (dataItem: FormulaItem) => Promise<void>;
-    readonly formulas: FormulaTypeItem[];
+    readonly formulas: import("./formula/index").FormulaTypeItem[];
+    readonly fontIconBaseUrl: string;
     readonly ElPopover: import("element-plus/es/utils/types").SFCWithInstall<import("vue").DefineComponent<{
         title: StringConstructor;
         width: import("element-plus/es/utils/props").BuildPropReturn<(StringConstructor | NumberConstructor)[], number, unknown, unknown, unknown>;
@@ -490,7 +484,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                         errorCaptured?: ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void) | ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void)[] | undefined;
                     };
                     $forceUpdate: () => void;
-                    $nextTick: typeof nextTick;
+                    $nextTick: typeof import("vue").nextTick;
                     $watch(source: string | Function, cb: Function, options?: import("vue").WatchOptions<boolean> | undefined): import("vue").WatchStopHandle;
                 } & Readonly<import("vue").ExtractPropTypes<{}>> & import("vue").ShallowUnwrapRef<import("element-plus").ElPopperInjectionContext> & import("vue").ComponentCustomProperties) | null>;
                 open: import("vue").Ref<boolean>;
@@ -594,7 +588,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 errorCaptured?: ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void) | ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void)[] | undefined;
             };
             $forceUpdate: () => void;
-            $nextTick: typeof nextTick;
+            $nextTick: typeof import("vue").nextTick;
             $watch(source: string | Function, cb: Function, options?: import("vue").WatchOptions<boolean> | undefined): import("vue").WatchStopHandle;
         } & Readonly<import("vue").ExtractPropTypes<{
             openDelay: import("element-plus/es/utils/props").BuildPropReturn<NumberConstructor, number | (() => number) | undefined, unknown, unknown, unknown>;
@@ -763,7 +757,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                     errorCaptured?: ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void) | ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void)[] | undefined;
                 };
                 $forceUpdate: () => void;
-                $nextTick: typeof nextTick;
+                $nextTick: typeof import("vue").nextTick;
                 $watch(source: string | Function, cb: Function, options?: import("vue").WatchOptions<boolean> | undefined): import("vue").WatchStopHandle;
             } & Readonly<import("vue").ExtractPropTypes<{}>> & import("vue").ShallowUnwrapRef<import("element-plus").ElPopperInjectionContext> & import("vue").ComponentCustomProperties) | null>;
             open: import("vue").Ref<boolean>;
@@ -807,7 +801,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
                 errorCaptured?: ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void) | ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void)[] | undefined;
             };
             $forceUpdate: () => void;
-            $nextTick: typeof nextTick;
+            $nextTick: typeof import("vue").nextTick;
             $watch(source: string | Function, cb: Function, options?: import("vue").WatchOptions<boolean> | undefined): import("vue").WatchStopHandle;
         } & Readonly<import("vue").ExtractPropTypes<{}>> & import("vue").ShallowUnwrapRef<import("element-plus").ElPopperInjectionContext> & import("vue").ComponentCustomProperties) | null | undefined>;
         hide: () => void;
@@ -911,12 +905,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
     }>> & {
         directive: import("element-plus/es/utils/types").SFCWithInstall<import("vue").ObjectDirective<any, any>>;
     };
-}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, "handleClickFormula"[], "handleClickFormula", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
-    editRef: {
-        type: ObjectConstructor;
-        required: false;
-    };
-}>> & {
+}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, "handleClickFormula"[], "handleClickFormula", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{}>> & {
     onHandleClickFormula?: ((...args: any[]) => any) | undefined;
 }, {}>;
 export default _sfc_main;

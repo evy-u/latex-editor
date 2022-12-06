@@ -22,6 +22,7 @@ const emits = defineEmits<{
 }>()
 
 async function handleClickFormula(dataItem: FormulaItem) {
+  console.log(dataItem, 'dataItem')
   emits('handleClickFormula', dataItem)
 }
 </script>

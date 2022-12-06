@@ -1,3 +1,3 @@
 import LatexEditor from './LatexEditor/LatexEditor.vue'
-
-export { LatexEditor }
+import formulaTypeList from './LatexEditor/components/tool/formula/index'
+export { LatexEditor, formulaTypeList }
