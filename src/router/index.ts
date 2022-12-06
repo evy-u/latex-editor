@@ -6,6 +6,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'latex-editor',
     component: () => import('../views/TestLatexEditor.vue'),
   },
+  {
+    path: '/doc',
+    name: 'latex-doc',
+    component: () => import('../views/LatexDoc.vue'),
+  },
 ]
 
 export const constRoutes = routes.filter(i => i.meta?.isConstRoute)
