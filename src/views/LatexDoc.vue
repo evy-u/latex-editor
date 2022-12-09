@@ -1,8 +1,8 @@
 <template>
-  <div class="page-doc" :index-list="indexList">
-    <index-bar>
-      <index-anchor v-for="(item, index) in indexList" :key="index" :index="item">
-        <cell title="文本" />
+  <div class="page-doc">
+    <index-bar :index-list="indexList">
+      <index-anchor v-for="(item, index) in formulaTypeList" :key="index" :index="item.name">
+        <cell :title="`${dataItem.name}`" v-for="(dataItem, dataIndex) in item.data" :key="dataIndex" />
       </index-anchor>
     </index-bar>
   </div>
