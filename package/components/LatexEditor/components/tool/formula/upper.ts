@@ -2,7 +2,7 @@ import { FormulaItem } from './index'
 
 const fonts = [
   {
-    name: '',
+    name: 'wideparen',
     icon: 'wideparen',
     formula: '\\wideparen{}',
   },

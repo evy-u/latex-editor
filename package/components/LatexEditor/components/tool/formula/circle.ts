@@ -2,7 +2,7 @@ import { FormulaItem } from './index'
 
 const fonts = [
   {
-    name: '',
+    name: '圈',
     icon: 'odot',
     formula: '\\odot',
   },

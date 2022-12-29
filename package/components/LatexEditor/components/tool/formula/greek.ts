@@ -2,72 +2,72 @@ import { FormulaItem } from './index'
 
 const radicals = [
   {
-    name: '',
+    name: 'Alpha',
     icon: 'Alpha',
     formula: '\\Alpha',
   },
   {
-    name: '',
+    name: 'alpha',
     icon: 'alpha',
     formula: '\\alpha',
   },
   {
-    name: '',
+    name: 'Beta',
     icon: 'Beta',
     formula: '\\Beta',
   },
   {
-    name: '',
+    name: 'beta',
     icon: 'beta',
     formula: '\\beta',
   },
   {
-    name: '',
+    name: 'Gamma',
     icon: 'Gamma',
     formula: '\\Gamma',
   },
   {
-    name: '',
+    name: 'gamma',
     icon: 'gamma',
     formula: '\\gamma',
   },
   {
-    name: '',
+    name: 'Theta',
     icon: 'Theta',
     formula: '\\Theta',
   },
   {
-    name: '',
+    name: 'theta',
     icon: 'theta',
     formula: '\\theta',
   },
   {
-    name: '',
+    name: 'Delta',
     icon: 'Delta',
     formula: '\\Delta',
   },
   {
-    name: '',
+    name: 'delta',
     icon: 'delta',
     formula: '\\delta',
   },
   {
-    name: '',
+    name: 'Lambda',
     icon: 'Lambda',
     formula: '\\Lambda',
   },
   {
-    name: '',
+    name: 'lambda',
     icon: 'lambda',
     formula: '\\lambda',
   },
   {
-    name: '',
+    name: 'Pi',
     icon: 'Pi',
     formula: '\\Pi',
   },
   {
-    name: '',
+    name: 'pi',
     icon: 'pi',
     formula: '\\pi',
   },

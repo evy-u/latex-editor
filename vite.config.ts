@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import Components from 'unplugin-vue-components/vite'
+import { VantResolver } from 'unplugin-vue-components/resolvers'
 
 const pathSrc = path.resolve(__dirname, './src')
 const pathVue3 = path.resolve(__dirname, './package/index.ts')
@@ -15,6 +17,9 @@ export default defineConfig({
   plugins: [
     vue({
       reactivityTransform: true,
+    }),
+    Components({
+      resolvers: [VantResolver()],
     }),
   ],
   resolve: {
