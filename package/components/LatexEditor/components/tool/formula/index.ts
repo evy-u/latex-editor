@@ -16,7 +16,10 @@ export interface FormulaItem {
   name: string
   icon: string
   formula: string
-  desc: string
+  exampleList: {
+    content: string
+    isLatex: boolean
+  }[]
 }
 
 export interface FormulaTypeItem {

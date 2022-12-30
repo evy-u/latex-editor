@@ -18,7 +18,7 @@
     "chalk": "^5.0.0",
     "element-plus": "^1.3.0-beta.5",
     "html2canvas": "^1.4.1",
-    "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.168",
+    "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.178",
     "lodash": "^4.17.21",
     "rollup-plugin-uglify": "^6.0.4",
     "sass": "^1.46.0",
@@ -35,6 +35,9 @@
     "@rollup/plugin-strip": "^2.1.0",
     "@types/node": "^17.0.8",
     "@vitejs/plugin-vue": "^2.0.1",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.20",
+    "tailwindcss": "^3.2.4",
     "unplugin-vue-components": "^0.22.12"
   },
   "types": "types/package/index.d.ts",
