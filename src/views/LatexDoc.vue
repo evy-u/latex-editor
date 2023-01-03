@@ -19,13 +19,14 @@
           </el-table-column>
           <el-table-column>
             <template #default="scope">
-              <KeMathJax :content="scope.row.formula" :global-render="true" v-if="!scope.row.exampleList"></KeMathJax>
+              <KeMathJax :content="scope.row.example || scope.row.formula" :global-render="true"></KeMathJax>
+              <!-- <KeMathJax :content="scope.row.formula" :global-render="true" v-if="!scope.row.exampleList"></KeMathJax>
               <template v-else>
                 <div v-for="(exampleItem, index) in scope.row.exampleList" :key="index" class="example-item">
                   <KeMathJax v-if="exampleItem.isLatex" :content="exampleItem.content" :global-render="true"></KeMathJax>
                   <div v-else>{{ exampleItem.content }}</div>
                 </div>
-              </template>
+              </template> -->
             </template>
           </el-table-column>
         </el-table>

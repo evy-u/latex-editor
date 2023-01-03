@@ -16,6 +16,7 @@ export interface FormulaItem {
   name: string
   icon: string
   formula: string
+  example: string
   exampleList: {
     content: string
     isLatex: boolean
