@@ -3,13 +3,18 @@ export interface FormulaItem {
     name: string;
     icon: string;
     formula: string;
-    desc: string;
+    isHandWrite?: boolean;
+    exampleList: {
+        content: string;
+        isLatex: boolean;
+    }[];
 }
 export interface FormulaTypeItem {
     name: string;
     icon: string;
-    data: FormulaItem[];
+    data: FormulaItem[] | string[];
     visibleDataList?: boolean;
+    isBase?: boolean;
 }
 declare const list: FormulaTypeItem[];
 export default list;

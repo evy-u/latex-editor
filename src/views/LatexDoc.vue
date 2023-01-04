@@ -6,7 +6,11 @@
     <van-index-bar :index-list="indexList" :sticky="false">
       <van-index-anchor v-for="item in formulaTypeList" :key="item.name" :index="item.name">
         <div class="type-item">{{ item.name }}</div>
-        <el-table :data="item.data" border stripe :show-header="false">
+        <div class="type-desc">{{ item.desc }}</div>
+        <div v-if="item.isBase" class="base-table">
+          <div v-for="(baseIcon, baseIndex) in item.data" :key="baseIndex" class="base-item">{{ baseIcon }}</div>
+        </div>
+        <el-table v-else :data="item.data" border stripe :show-header="false" class="mb-[12px]">
           <el-table-column>
             <template #default="scope">
               <div :name="scope.row.name" :icon="scope.row.icon" class="mr-[12px]">{{ scope.row.name }}</div></template
@@ -19,14 +23,14 @@
           </el-table-column>
           <el-table-column>
             <template #default="scope">
-              <KeMathJax :content="scope.row.example || scope.row.formula" :global-render="true"></KeMathJax>
-              <!-- <KeMathJax :content="scope.row.formula" :global-render="true" v-if="!scope.row.exampleList"></KeMathJax>
+              <!-- <KeMathJax :content="scope.row.example || scope.row.formula" :global-render="true"></KeMathJax> -->
+              <KeMathJax :content="scope.row.formula" :global-render="true" v-if="!scope.row.exampleList"></KeMathJax>
               <template v-else>
                 <div v-for="(exampleItem, index) in scope.row.exampleList" :key="index" class="example-item">
                   <KeMathJax v-if="exampleItem.isLatex" :content="exampleItem.content" :global-render="true"></KeMathJax>
                   <div v-else>{{ exampleItem.content }}</div>
                 </div>
-              </template> -->
+              </template>
             </template>
           </el-table-column>
         </el-table>
@@ -85,6 +89,26 @@ onMounted(() => {
   }
   .van-cell__value {
     text-align: left;
+  }
+  .type-desc {
+    color: #888;
+    margin-bottom: 12px;
+    padding-left: 14px;
+  }
+  .base-table {
+    display: flex;
+    flex-wrap: wrap;
+    border-left: 1px solid rgb(229, 231, 235);
+    margin-bottom: 12px;
+    .base-item {
+      line-height: 40px;
+      width: 40px;
+      padding: 0 12px;
+      border-top: 1px solid rgb(229, 231, 235);
+      border-right: 1px solid rgb(229, 231, 235);
+      border-bottom: 1px solid rgb(229, 231, 235);
+      border-collapse: collapse;
+    }
   }
   .example-item {
     position: relative;

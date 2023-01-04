@@ -16,6 +16,16 @@ const fonts = [
     icon: 'textbf',
     formula: '\\textbf{}',
   },
+  {
+    name: '上角标',
+    icon: 'sub',
+    formula: '^{}',
+  },
+  {
+    name: '下角标',
+    icon: 'sup',
+    formula: '_{}',
+  },
 ] as FormulaItem[]
 
 export default fonts
