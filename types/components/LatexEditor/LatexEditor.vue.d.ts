@@ -1032,12 +1032,12 @@ declare const _sfc_main: import("vue").DefineComponent<{
         onOnUpdateRendered?: ((...args: any[]) => any) | undefined;
     }, {
         display: string;
-        globalRender: boolean;
-        lineHeight: string;
         punctuation: boolean;
-        textColor: string;
         lineClass: boolean;
         divideChinese: boolean;
+        globalRender: boolean;
+        lineHeight: string;
+        textColor: string;
     }>;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     isTool: {

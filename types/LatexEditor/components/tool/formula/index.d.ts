@@ -10,11 +10,13 @@ export interface FormulaItem {
     }[];
 }
 export interface FormulaTypeItem {
+    id: number;
     name: string;
     icon: string;
     data: FormulaItem[] | string[];
     visibleDataList?: boolean;
     isBase?: boolean;
+    desc?: string;
 }
 declare const list: FormulaTypeItem[];
 export default list;

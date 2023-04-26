@@ -1,16 +1,44 @@
 <template>
   <div class="page-doc">
-    <el-input v-model="searchValue" placeholder="Please input" size="large" :suffix-icon="Search" class="search" @keyup.enter="doSearch">
-      <!-- <template #append>Cmd / Ctrl + K</template> -->
-    </el-input>
+    <el-select
+      v-model="selectValue"
+      placeholder="Please input"
+      size="large"
+      remote
+      filterable
+      style="width: calc(100% - 180px); margin-left: 110px"
+      :suffix-icon="Search"
+      :suffix-transition="false"
+      class="search"
+      ref="searchRef"
+      :remote-method="filterMethod"
+      value-key="id"
+      :default-first-option="true"
+      @change="val => doSearch(val)"
+      @focus="searchFocus"
+    >
+      <template #prefix>Cmd / Ctrl + K </template>
+      <el-option v-for="item in searchOptions" :key="item.id" :value="item"> {{ item.label }} {{ item.value }} </el-option>
+    </el-select>
     <van-index-bar :index-list="indexList" :sticky="false">
       <van-index-anchor v-for="item in formulaTypeList" :key="item.name" :index="item.name">
-        <div class="type-item">{{ item.name }}</div>
+        <div class="type-item" :type-id="item.id">{{ item.name }}</div>
         <div class="type-desc">{{ item.desc }}</div>
         <div v-if="item.isBase" class="base-table">
           <div v-for="(baseIcon, baseIndex) in item.data" :key="baseIndex" class="base-item">{{ baseIcon }}</div>
         </div>
-        <el-table v-else :data="item.data" border stripe :show-header="false" class="mb-[12px]">
+        <el-table
+          v-else
+          ref="latexTableRef"
+          :data="item.data"
+          border
+          stripe
+          :show-header="false"
+          class="mb-[12px]"
+          current-row-key="icon"
+          :highlight-current-row="true"
+          :row-class-name="tableRowClassName"
+        >
           <el-table-column>
             <template #default="scope">
               <div :name="scope.row.name" :icon="scope.row.icon" class="mr-[12px]">{{ scope.row.name }}</div></template
@@ -39,18 +67,107 @@
   </div>
 </template>
 <script setup lang="ts">
-import { formulaTypeList } from 'latex-editor'
+import { formulaTypeAllList } from 'latex-editor'
 import { Search } from '@element-plus/icons-vue'
 import { KeMathJax, globalRender } from 'learnable-lib'
 import { onMounted, watch, nextTick } from 'vue'
+import { flatMapDeep } from 'lodash'
+import { ElTable } from 'element-plus'
+import { Shortcuts } from 'shortcuts'
+import { FormulaTypeItem, FormulaItem } from '../../types/components/LatexEditor/components/tool/formula'
+
+type OptionItem = { label: string; value: any; id: number; parentId?: number }
+let formulaTypeList = formulaTypeAllList as FormulaTypeItem[]
 
 let indexList = $computed(() => {
   return formulaTypeList.map(item => item.name)
 })
+const shortcuts = new Shortcuts()
 
-let searchValue = $ref('')
+let selectValue = $ref<string | OptionItem>('')
+let searchOptions = $ref<OptionItem[]>([])
+let latexTableRef = $ref<InstanceType<typeof ElTable>[]>([])
+let searchRef = $ref<HTMLDivElement>()
 
-function doSearch() {}
+function filterMethod(val: string) {
+  if (!val) {
+    searchOptions = flatMapDeep(
+      formulaTypeList
+        .map(item => {
+          return {
+            label: item.name,
+            value: '',
+            id: item.id,
+          }
+        })
+        .filter(i => i) as OptionItem[]
+    )
+    return
+  }
+  searchOptions = flatMapDeep(
+    formulaTypeList
+      .map(item => {
+        if (item.name.includes(val)) {
+          return {
+            label: item.name,
+            value: '',
+            id: item.id,
+          }
+        } else {
+          return item.data
+            .map(dataItem => {
+              if (typeof dataItem === 'object' && (dataItem.name?.includes(val) || dataItem.formula?.includes(val))) {
+                return {
+                  label: dataItem.name,
+                  value: dataItem.formula,
+                  id: dataItem.icon,
+                  parentId: item.id,
+                }
+              }
+            })
+            .filter(i => i)
+        }
+      })
+      .filter(i => i) as unknown as OptionItem[]
+  )
+}
+
+function doSearch(data: OptionItem) {
+  searchRef?.blur()
+  let ele = null
+  if (!data.parentId) {
+    ele = document.querySelector(`div[type-id="${data.id}"]`)
+  } else {
+    ele = document.querySelector(`div[icon=${data.id}]`)
+  }
+  ele?.scrollIntoView()
+  if (data.parentId && latexTableRef[Number(data.parentId) - 1 - 2]) {
+    // TODO: latexTableRef position ？
+    latexTableRef[Number(data.parentId) - 1 - 2].setCurrentRow(data)
+  }
+}
+
+function searchFocus() {
+  searchOptions = flatMapDeep(
+    formulaTypeList
+      .map(item => {
+        return {
+          label: item.name,
+          value: '',
+          id: item.id,
+        }
+      })
+      .filter(i => i) as OptionItem[]
+  )
+}
+
+function tableRowClassName(data: { row: FormulaItem; rowIndex: number }) {
+  if (data.row.icon === selectValue?.id) {
+    return 'light-row'
+  } else {
+    return ''
+  }
+}
 
 watch(
   () => formulaTypeList,
@@ -66,12 +183,44 @@ watch(
 )
 
 onMounted(() => {
-  // globalRender()
+  shortcuts.add([
+    {
+      shortcut: 'CmdOrCtrl+K',
+      handler: event => {
+        searchRef?.blur()
+        searchRef?.focus()
+        return true
+      },
+    },
+  ])
 })
 </script>
 <style lang="scss">
 .page-doc {
-  padding: 30px 100px 40px 140px;
+  box-sizing: border-box;
+  height: 100vh;
+  padding: 30px 0 40px 0;
+  overflow: hidden;
+  .el-input__prefix {
+    left: 1px;
+    padding: 0 14px;
+    background: #f5f7fa;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: 0 1px 0 0 var(--el-input-border-color) inset, 0 -1px 0 0 var(--el-input-border-color) inset, -1px 0 0 0 var(--el-input-border-color) inset;
+  }
+  .el-input__inner {
+    box-sizing: border-box;
+  }
+  .el-select .el-input__inner:focus,
+  .el-select .el-input.is-focus .el-input__inner {
+    border-left-color: #dcdfe6 !important;
+  }
+  .van-index-bar {
+    height: calc(100% - 70px);
+    padding: 0 40px 0 100px;
+    overflow-y: auto;
+  }
   .van-index-bar__sidebar {
     left: 0;
     right: auto;
@@ -129,6 +278,10 @@ onMounted(() => {
     &:nth-child(even) {
       padding-bottom: 12px;
     }
+  }
+
+  .el-table .light-row {
+    background: #fdf6ec;
   }
 }
 </style>

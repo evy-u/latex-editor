@@ -26,6 +26,7 @@ export interface FormulaItem {
 }
 
 export interface FormulaTypeItem {
+  id: number
   name: string
   icon: string
   data: FormulaItem[] | string[]
@@ -35,12 +36,14 @@ export interface FormulaTypeItem {
 }
 const list: FormulaTypeItem[] = [
   {
+    id: 1,
     name: '直接使用',
     icon: '',
     data: baseIcon,
     isBase: true,
   },
   {
+    id: 2,
     name: '需要转义',
     icon: '',
     data: transIcon,
@@ -50,22 +53,26 @@ const list: FormulaTypeItem[] = [
 为了防止混淆，在以下字符表示自身含义时，需要在其前加 \\`,
   },
   {
+    id: 3,
     name: '希腊字母',
     icon: '',
     data: greek,
   },
   {
+    id: 4,
     name: '运算符号',
     icon: '',
     data: calculate,
   },
   {
+    id: 5,
     name: '比较符号',
     icon: '',
     data: compare,
     desc: `大于号及小于号直接使用 >, <`,
   },
   {
+    id: 6,
     name: '几何符号',
     icon: '',
     data: geometry,
@@ -73,49 +80,52 @@ const list: FormulaTypeItem[] = [
   // TODO:
 
   {
+    id: 7,
     name: '逻辑符号',
     icon: '',
     data: because,
   },
 
   {
+    id: 8,
     name: '顶部符号',
     icon: '',
     data: upper,
   },
 
   {
-    name: '比较符号',
-    icon: '',
-    data: compare,
-  },
-  {
+    id: 9,
     name: '三角函数',
     icon: '',
     data: trigonometricFunction,
   },
   {
+    id: 11,
     name: '含圈符号',
     icon: '',
     data: circle,
   },
   {
+    id: 12,
     name: '形状符号',
     icon: '',
     data: shape,
   },
   {
+    id: 13,
     name: '分式',
     icon: '',
     data: frac,
   },
   {
+    id: 14,
     name: '根式',
     icon: '',
     data: radicals,
   },
 
   {
+    id: 15,
     name: '字体',
     icon: '',
     data: fonts,
