@@ -32,11 +32,9 @@
           ref="latexTableRef"
           :data="item.data"
           border
-          stripe
           :show-header="false"
           class="mb-[12px]"
           current-row-key="icon"
-          :highlight-current-row="true"
           :row-class-name="tableRowClassName"
         >
           <el-table-column>
@@ -75,6 +73,7 @@ import { flatMapDeep } from 'lodash'
 import { ElTable } from 'element-plus'
 import { Shortcuts } from 'shortcuts'
 import { FormulaTypeItem, FormulaItem } from '../../types/components/LatexEditor/components/tool/formula'
+import _ from 'lodash'
 
 type OptionItem = { label: string; value: any; id: number; parentId?: number }
 let formulaTypeList = formulaTypeAllList as FormulaTypeItem[]
@@ -194,6 +193,20 @@ onMounted(() => {
     },
   ])
 })
+
+function formatData(node) {
+  const trArr = node.querySelectorAll('tr')
+  const result = []
+  Array.from(trArr).forEach(item => {
+    const tdArr = Array.from(item.querySelectorAll('td'))
+    result.push({
+      name: tdArr[2]?.innerHTML,
+      icon: tdArr[1]?.querySelector('span')?.innerHTML.slice(1),
+      formula: tdArr[1]?.querySelector('span')?.innerHTML,
+    })
+  })
+  console.log(result)
+}
 </script>
 <style lang="scss">
 .page-doc {
@@ -220,6 +233,9 @@ onMounted(() => {
     height: calc(100% - 70px);
     padding: 0 40px 0 100px;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   .van-index-bar__sidebar {
     left: 0;
@@ -282,6 +298,9 @@ onMounted(() => {
 
   .el-table .light-row {
     background: #fdf6ec;
+  }
+  .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
+    background: transparent;
   }
 }
 </style>

@@ -11,6 +11,9 @@ import shape from './shape'
 import frac from './frac'
 import greek from './greek'
 import { baseIcon, transIcon } from './base'
+import { dots } from './dots'
+import { collection } from './collection'
+import { rangeList } from './range'
 export const fontIconBaseUrl = 'https://homework-webfront.oss-cn-beijing.aliyuncs.com/LatexIcon/'
 
 export interface FormulaItem {
@@ -77,15 +80,37 @@ const list: FormulaTypeItem[] = [
     icon: '',
     data: geometry,
   },
-  // TODO:
-
   {
     id: 7,
+    name: '点',
+    icon: '',
+    data: dots,
+  },
+  {
+    id: 8,
     name: '逻辑符号',
     icon: '',
     data: because,
   },
-
+  {
+    id: 9,
+    name: '集合符号',
+    icon: '',
+    data: collection,
+  },
+  {
+    id: 10,
+    name: '范围',
+    icon: '',
+    data: rangeList,
+  },
+  {
+    id: 11,
+    name: '三角函数',
+    icon: '',
+    data: trigonometricFunction,
+  },
+  // TODO:
   {
     id: 8,
     name: '顶部符号',
@@ -93,12 +118,6 @@ const list: FormulaTypeItem[] = [
     data: upper,
   },
 
-  {
-    id: 9,
-    name: '三角函数',
-    icon: '',
-    data: trigonometricFunction,
-  },
   {
     id: 11,
     name: '含圈符号',

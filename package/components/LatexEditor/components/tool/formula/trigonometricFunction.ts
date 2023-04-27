@@ -16,7 +16,6 @@ const radicals = [
     icon: 'tan',
     formula: '\\tan',
   },
-
   {
     name: '余切',
     icon: 'cot',
