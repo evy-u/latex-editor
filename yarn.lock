@@ -1927,6 +1927,11 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
+recursive-match@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmmirror.com/recursive-match/-/recursive-match-1.0.2.tgz#6e6c3ae57ddf7910581ba00ab092438406c03050"
+  integrity sha512-QP25MSqpVlWkD8ejSJ9MUh4GV2GIaLMYELtsKxaAE9Pqq2zscyX+9PONwttaM6gWEvsmNR8Ar2YuUyjC7/DbSw==
+
 regenerator-runtime@^0.13.10:
   version "0.13.11"
   resolved "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz"

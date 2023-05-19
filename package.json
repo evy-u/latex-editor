@@ -21,6 +21,7 @@
     "html2canvas": "^1.4.1",
     "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.228",
     "lodash": "^4.17.21",
+    "recursive-match": "^1.0.2",
     "rollup-plugin-uglify": "^6.0.4",
     "sass": "^1.46.0",
     "shortcuts": "^2.0.3",

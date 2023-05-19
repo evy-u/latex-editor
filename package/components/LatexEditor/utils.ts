@@ -1,4 +1,5 @@
 import { parseStrRecursive, resetData } from './latex/parse'
+import parseRecursive from './latex/parse_new'
 import { NameType, SignItem } from './latex/type'
 import _ from 'lodash'
 

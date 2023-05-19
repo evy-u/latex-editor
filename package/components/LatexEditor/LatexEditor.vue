@@ -13,6 +13,8 @@ import { setSelectionRange, CursorInfo, insertNode, observerNode, getSelection }
 import { FormulaItem } from './components/tool/formula'
 import { KeMathJax } from 'learnable-lib'
 import 'learnable-lib/dist/style.css'
+import parseRecursive from './latex/parse_new'
+import { parseStrRecursive } from './latex/parse'
 
 const props = withDefaults(
   defineProps<{
@@ -22,7 +24,7 @@ const props = withDefaults(
     isTool: true,
   }
 )
-let editContent = $ref('') // latex公式串 \\frac{}{}\\sin777\\sqrt{66\\cos}hh
+let editContent = $ref('\\becausehhh\\because\\frac{分子\\div}{分母\\textcircled{10}}\\angle') // latex公式串 \\frac{}{}\\sin777\\sqrt{66\\cos}hh
 const editRef = $ref<InstanceType<typeof HTMLDivElement>>() // 编辑框元素
 let cursorInfo = $ref<CursorInfo>({
   cursorNodeIndex: 0, // 光标在元素的index
@@ -31,6 +33,7 @@ let cursorInfo = $ref<CursorInfo>({
 let isChangeCursor = $ref(true)
 
 onMounted(() => {
+  test()
   cursorInfo.cursorNode = editRef as HTMLElement
   if (!editRef) {
     return
@@ -74,6 +77,11 @@ onMounted(() => {
     }
   })
 })
+
+function test() {
+  parseRecursive(editContent)
+  // parseStrRecursive(editContent)
+}
 
 // 点击公式
 function handleClickFormula(dataItem: FormulaItem) {

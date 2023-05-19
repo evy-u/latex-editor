@@ -127,7 +127,7 @@ export function parseStrRecursive(str: string, parentNode?: SignItem) {
   let __parseArr: SignItem[] = []
 
   let matchArr = matchBackets(str)
-  // console.log('matchArr {}:', JSON.parse(JSON.stringify(matchArr)), parentNode, __IndexNow)
+  console.log('matchArr {}:', JSON.parse(JSON.stringify(matchArr)), parentNode, __IndexNow)
   if (!matchArr.length) {
     // console.log(76, str, parentNode)
     // 没有括号
@@ -205,7 +205,7 @@ export function parseStrRecursive(str: string, parentNode?: SignItem) {
               }
               let keys = Object.keys(item?.brackets || {})
               item.brackets[keys.length] = parseStrRecursive(`{${nowValue}}`, Object.assign({}, item))
-              console.log(333, Object.assign({}, item))
+              // console.log(333, Object.assign({}, item))
             } else {
               // 只是纯文本
               let __start = calcIndex((item?.end || 0) + 1)
