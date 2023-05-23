@@ -16,7 +16,7 @@
           :remote-method="filterMethod"
           value-key="id"
           :default-first-option="true"
-          @change="val => doSearch(val)"
+          @change="doSearch"
           @focus="searchFocus"
         >
           <template #prefix>Cmd / Ctrl + K </template>
@@ -29,64 +29,54 @@
       </div>
     </div>
 
-    <van-index-bar :index-list="indexList" :sticky="false" :sticky-offset-top="64">
-      <van-index-anchor v-for="item in formulaTypeList" :key="item.name" :index="item.name">
+    <van-index-bar :index-list="indexList" :sticky="false" :sticky-offset-top="64" highlight-color="#329894">
+      <van-index-anchor v-for="(item, index) in formulaTypeList" :key="item.name" :index="item.name">
         <div class="type-item" :type-id="item.id">{{ item.name }}</div>
         <div class="type-desc">{{ item.desc }}</div>
         <div v-if="item.isBase" class="base-table">
           <div v-for="(baseIcon, baseIndex) in item.data" :key="baseIndex" class="base-item">{{ baseIcon }}</div>
         </div>
-        <el-table
-          v-else
-          ref="latexTableRef"
-          :data="item.data"
-          border
-          :show-header="false"
-          class="mb-[12px]"
-          current-row-key="icon"
-          :row-class-name="tableRowClassName"
-        >
-          <el-table-column>
-            <template #default="scope">
-              <div :name="scope.row.name" :icon="scope.row.icon" class="mr-[12px]">{{ scope.row.name }}</div></template
-            >
-          </el-table-column>
-          <el-table-column>
-            <template #default="scope">
-              {{ scope.row.formula }}
+        <div class="formula-list">
+          <div
+            class="formula-icon"
+            :class="[`formula-${index}-${fIndex}`, `formula-${typeof fm === 'string' ? fm : fm.name}`]"
+            v-for="(fm, fIndex) in item.data"
+            :key="fIndex"
+            @click="() => handleClickFormula(fm, `formula-${index}-${fIndex}`)"
+          >
+            <template v-if="typeof fm === 'string'">
+              <div class="name">{{ fm }}</div>
+              <div class="icon">{{ fm }}</div>
+              <div class="text">{{ fm }}</div>
             </template>
-          </el-table-column>
-          <el-table-column>
-            <template #default="scope">
-              <!-- <KeMathJax :content="scope.row.example || scope.row.formula" :global-render="true"></KeMathJax> -->
-              <KeMathJax :content="scope.row.formula" :global-render="true" v-if="!scope.row.exampleList"></KeMathJax>
-              <template v-else>
-                <div v-for="(exampleItem, index) in scope.row.exampleList" :key="index" class="example-item">
-                  <KeMathJax v-if="exampleItem.isLatex" :content="exampleItem.content" :global-render="true"></KeMathJax>
-                  <div v-else>{{ exampleItem.content }}</div>
-                </div>
-              </template>
+            <template v-else>
+              <div class="name">{{ fm.name }}</div>
+              <div class="icon">
+                <img :src="fontIconBaseUrl + fm.icon + '.svg'" />
+              </div>
+              <div class="text">{{ fm.formula }}</div>
             </template>
-          </el-table-column>
-        </el-table>
+          </div>
+        </div>
       </van-index-anchor>
     </van-index-bar>
   </div>
 </template>
 <script setup lang="ts">
-import { formulaTypeAllList } from 'latex-editor'
+import { formulaTypeAllList, fontIconBaseUrl } from 'latex-editor'
 import { Search } from '@element-plus/icons-vue'
 import { KeMathJax, globalRender } from 'learnable-lib'
 import { onMounted, watch, nextTick } from 'vue'
 import { flatMapDeep } from 'lodash'
-import { ElTable } from 'element-plus'
+import { ElMessage, ElTable } from 'element-plus'
 import { Shortcuts } from 'shortcuts'
 import { FormulaTypeItem, FormulaItem } from '../../types/components/LatexEditor/components/tool/formula'
 import _ from 'lodash'
 import { useRouter } from 'vue-router'
+import { copyByContent } from '../../package/utils/copy'
 
 type OptionItem = { label: string; value: any; id: number; parentId?: number }
-let formulaTypeList = formulaTypeAllList as FormulaTypeItem[]
+let formulaTypeList = formulaTypeAllList as unknown as FormulaTypeItem[]
 
 const router = useRouter()
 let indexList = $computed(() => {
@@ -148,15 +138,17 @@ function doSearch(data: OptionItem) {
   if (!data.parentId) {
     ele = document.querySelector(`div[type-id="${data.id}"]`)
   } else {
-    ele = document.querySelector(`div[icon=${data.id}]`)
+    ele = document.querySelector(`.formula-${data.label}`)
   }
-  ele?.scrollIntoView({
-    block: 'start',
+  console.log(data, ele, `.formula-${data.label}`)
+  const activeArr = Array.from(document.querySelectorAll('.active')) as HTMLDivElement[]
+  activeArr.forEach(item => {
+    item.classList.remove('active')
   })
-  if (data.parentId && latexTableRef[Number(data.parentId) - 1 - 2]) {
-    // TODO: latexTableRef position ？
-    latexTableRef[Number(data.parentId) - 1 - 2].setCurrentRow(data)
-  }
+  ele?.scrollIntoView({
+    block: 'center',
+  })
+  ele?.classList.add('active')
 }
 
 function searchFocus() {
@@ -171,14 +163,6 @@ function searchFocus() {
       })
       .filter(i => i) as OptionItem[]
   )
-}
-
-function tableRowClassName(data: { row: FormulaItem; rowIndex: number }) {
-  if (data.row.icon === selectValue?.id) {
-    return 'light-row'
-  } else {
-    return ''
-  }
 }
 
 function toDoc() {
@@ -218,6 +202,20 @@ onMounted(() => {
     },
   ])
 })
+
+async function handleClickFormula(item: FormulaItem | string, elClass: string) {
+  if (typeof item === 'string') {
+    await copyByContent(item)
+  } else {
+    await copyByContent(item.formula)
+  }
+  ElMessage.success({
+    message: 'Copied！',
+    appendTo: `.${elClass}`,
+    icon: 'none',
+    duration: 800,
+  })
+}
 </script>
 <style lang="scss">
 .page-doc {
@@ -237,7 +235,8 @@ onMounted(() => {
     border-left-color: #dcdfe6 !important;
   }
   .van-index-bar {
-    height: calc(100% - 70px);
+    box-sizing: border-box;
+    height: 100%;
     padding: 0 40px 0 100px;
     overflow-y: auto;
     &::-webkit-scrollbar {
@@ -250,28 +249,20 @@ onMounted(() => {
   .van-index-bar__sidebar {
     left: 0;
     right: auto;
+    top: 53.4%;
   }
-
-  .van-cell__title {
+  .van-index-anchor {
+    padding-left: 40px;
+  }
+  .el-message {
+    position: absolute;
+    top: 40%;
+    right: 8px;
+    min-width: 66px;
+    --el-message-padding: 4px;
+  }
+  .el-message__icon {
     display: none !important;
-  }
-  .van-cell__value {
-    text-align: left;
-  }
-
-  .el-table {
-    font-family: Segoe UI Semibold;
-  }
-
-  .cell {
-    white-space: pre-wrap;
-  }
-
-  .el-table .light-row {
-    background: #fdf6ec;
-  }
-  .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
-    background: transparent;
   }
 }
 </style>
@@ -314,45 +305,101 @@ onMounted(() => {
     font-size: 16px;
     line-height: 42px;
     font-weight: 700;
+    margin-top: 12px;
   }
   .type-desc {
     color: #888;
     margin-bottom: 12px;
     padding-left: 14px;
   }
-  .base-table {
-    display: flex;
-    flex-wrap: wrap;
-    border-left: 1px solid rgb(229, 231, 235);
-    margin-bottom: 12px;
-    .base-item {
-      line-height: 40px;
-      width: 40px;
-      padding: 0 12px;
-      border-top: 1px solid rgb(229, 231, 235);
-      border-right: 1px solid rgb(229, 231, 235);
-      border-bottom: 1px solid rgb(229, 231, 235);
-      border-collapse: collapse;
+  @media (min-width: 600px) {
+    .formula-list {
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
     }
   }
-  .example-item {
-    position: relative;
-    padding-left: 8px;
-    &:nth-child(odd) {
-      ::before {
-        display: block;
-        content: '';
-        position: absolute;
-        left: -2px;
-        top: 9px;
-        width: 4px;
-        height: 4px;
-        background: #1989fa;
-        border-radius: 50%;
-      }
+
+  @media (min-width: 1000px) {
+    .formula-list {
+      display: grid;
+
+      grid-template-columns: repeat(6, 1fr);
     }
-    &:nth-child(even) {
-      padding-bottom: 12px;
+  }
+  @media (min-width: 1200px) {
+    .formula-list {
+      display: grid;
+
+      grid-template-columns: repeat(8, 1fr);
+    }
+  }
+  @media (min-width: 1400px) {
+    .formula-list {
+      display: grid;
+
+      grid-template-columns: repeat(10, 1fr);
+    }
+  }
+  .formula-list {
+    display: grid;
+    gap: 16px;
+  }
+  .formula-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 4px solid rgba(27, 31, 35, 0.05);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: none;
+    &:hover,
+    &.active {
+      border: 4px solid #329894;
+      box-shadow: 0px 0px 10px rgba(10, 31, 35, 0.3);
+    }
+    .name {
+      display: block;
+      color: #fff;
+      font-size: 16px;
+      background: #329894;
+      font-weight: 600;
+      text-align: center;
+      padding: 5px 5px 8px;
+    }
+    .text {
+      display: block;
+      color: #666;
+      background: rgba(27, 31, 35, 0.05);
+      text-align: center;
+      padding: 5px;
+      line-height: 1.3;
+      font-size: 18px;
+      font-family: monospace;
+      white-space: break-spaces;
+      line-break: anywhere;
+    }
+    .icon {
+      display: block;
+      text-align: center;
+      padding: 5px;
+      font-size: 20px;
+      overflow-x: scroll;
+      img {
+        width: 60%;
+        height: auto;
+        margin: auto;
+      }
+      &:nth-last-of-type(2) {
+        img {
+          width: 36%;
+          min-height: 40px;
+        }
+      }
     }
   }
 }

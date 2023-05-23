@@ -1,3 +1,3 @@
-import LatexEditor from './LatexEditor/LatexEditor.vue';
-import formulaTypeAllList from './LatexEditor/components/tool/formula/index';
-export { LatexEditor, formulaTypeAllList };
+import LatexEditor from './LatexEditor/editor';
+import formulaTypeAllList, { fontIconBaseUrl } from './LatexEditor/formula';
+export { LatexEditor, formulaTypeAllList, fontIconBaseUrl, MathjaxOptionType };

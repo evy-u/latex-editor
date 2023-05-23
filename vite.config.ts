@@ -6,7 +6,6 @@ import { VantResolver } from 'unplugin-vue-components/resolvers'
 
 const pathSrc = path.resolve(__dirname, './src')
 const pathVue3 = path.resolve(__dirname, './package/index.ts')
-console.log('pathVue3', pathVue3)
 // https://vitejs.dev/config/
 export default defineConfig({
   envDir: path.resolve(__dirname, './env'),

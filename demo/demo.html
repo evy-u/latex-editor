@@ -9,14 +9,12 @@
   <title>test-latex-editor</title>
   <!-- 第一步：引入js和css -->
   <link rel="stylesheet" href="./style.css">
-  <script src="./latex-editor.module.js"></script>
+  <script src="./index.umd.js"></script>
 </head>
 
 <body>
-  <!-- 第二步：页面要有挂在各组件的父节点元素 -->
-  <div class="latex-tool"></div>
-  <div class="latex-input"></div>
-  <div class="latex-output"></div>
+  <!-- 第二步：页面要有挂载组件的节点元素 -->
+  <div class="latex-editor"></div>
   <!-- <div>
     <button onclick="getImage()">获取图片</button>
   </div> -->
@@ -24,31 +22,9 @@
     <img class="latex-image">
   </div>
   <script>
-    // 第三步：初始化各组件
-    // 输出
-    const Output = new latexOutput({
-      container: '.latex-output',
-    })
-
-    // 输入
-    const Input = new latexInput({
-      container: '.latex-input',
-      contentChange: function (content) {
-        // console.log('content:', content)
-        Output.setContent(content)
-      }
-    })
-
-    // 工具栏
-    const Tool = new latexTool({
-      container: '.latex-tool',
-      handleClickFormula: function (ev, signItem) { // 点击公式
-        // console.log('signItem:', signItem)
-        // if (!signItem) {
-        //   throw new Error('错误：请联系管理员')
-        // }
-        Input.setCursorPosition(signItem)
-      }
+    // 第三步：初始化组件
+    new LatexEditor(document.querySelector('.latex-editor'), {
+      content: '',
     })
 
     // 转换成图片 base64

@@ -1,0 +1,38 @@
+.latex-editor-content {
+  box-sizing: border-box;
+  margin-top: 30px;
+  outline: none;
+  min-width: 100%;
+  min-height: 200px;
+  padding: 16px;
+  border: 2px solid rgb(206, 212, 218);
+  border-radius: 6px;
+  font-family: Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  font-size: 1.4rem;
+  color: #333;
+  .lx {
+    color: #008de9;
+  }
+  .bk {
+    color: #608b4e;
+  }
+}
+.latex-root {
+  color: inherit;
+  white-space: pre-wrap;
+}
+text,
+font {
+  color: #333;
+}
+body {
+  user-select: none;
+}
+
+.option-panel {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  height: 300px;
+  overflow-y: auto;
+}
