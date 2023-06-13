@@ -7,6 +7,7 @@
   "scripts": {
     "husky": "husky install",
     "build": "vite build -c viteconfig.lib.build.ts && cp latex-lib/* demo",
+    "build1": "vite build -c viteconfig.lib.build1.ts && cp latex-render/mathjax.umd.js latexRender/mathjax.js",
     "build:dev": "vite build --mode development",
     "dev": "vite --mode development",
     "deploy:dev": "npm run build:dev && node ./node_modules/learnable-lib/scripts/publish.js development"

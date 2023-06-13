@@ -21,7 +21,7 @@ declare class LatexEditor {
     inserContent(str: string): void;
     handleClickFormula(ev: any, data: FormulaItem): void;
     getRangeInfo(): void;
-    optionChange(options: MathjaxOptionType): void;
+    optionChange(config: MathjaxOptionType): void;
     globalRenderContent(): void;
 }
 export default LatexEditor;

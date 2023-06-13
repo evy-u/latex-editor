@@ -10,8 +10,8 @@ declare class LatexInput {
     constructor(parameters: LatexInputParam);
     init(): void;
     observerDelete(): void;
-    observerContentChange(selection: Selection | null): void;
-    setEditContent(selection: Selection | null): void;
+    observerContentChange(mutation: MutationRecord): void;
+    setEditContent(): void;
     getContainer(): HTMLDivElement;
     getContent(): string;
     removeFontTag(): void;

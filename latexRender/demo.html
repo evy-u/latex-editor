@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <head name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>latex-render</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./mathjax.js"></script>
+  </head>
+
+<body>
+  <div class="latex-div"></div>
+  <script>
+    let defaultConfig = { // 非必传
+      lineBreak: true, // 换行
+      lineHeight: '20px', // 行高
+      textColor: '#333', // 文字颜色
+      divideChinese: false, // 将中文从latex中拆分出来
+      wrapMathrm: true, // 非罗马字体
+    }
+
+    console.log('render start')
+    latexRender(document.querySelector('.latex-div'), `\\because抛物线y=-\\frac{1}{2}x^{2}向上平移2个单位长度,再向右平移1个单位长度得到的抛物线是y=-\\frac{1}{2}(x-1)^{2}+2,\n\\thereforea=-\\frac{1}{2},h=-1,k=2.`, defaultConfig).then(() => {
+      console.log('render over')
+    })
+
+  </script>
+
+</body>
+
+</html>

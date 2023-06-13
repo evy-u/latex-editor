@@ -17,11 +17,11 @@ const routes: Array<RouteRecordRaw> = [
       title: 'LatexIcon Try',
     },
   },
-  // {
-  //   path: '/',
-  //   name: 'latex-editor',
-  //   component: () => import('../views/TestLatexEditor.vue'),
-  // },
+  {
+    path: '/editor',
+    name: 'latex-editor',
+    component: () => import('../views/TestLatexEditor.vue'),
+  },
 ]
 
 export const constRoutes = routes.filter(i => i.meta?.isConstRoute)
