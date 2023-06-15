@@ -100,7 +100,6 @@ class LatexEditor {
 
   globalRenderContent() {
     const __content = this.Input?.getContent() || ''
-    console.log(__content)
     this.Output?.setContent(__content)
   }
 }

@@ -132,7 +132,6 @@ export async function observerNode(node: HTMLElement, cb: (mutation: MutationRec
           cb(mutation)
           break
         case 'childList':
-          console.log('childList')
           cb(mutation)
           break
         // case 'attributes':
@@ -242,4 +241,26 @@ function recursiveFindPrevNode(node: HTMLElement): HTMLElement {
   } else {
     return node
   }
+}
+
+// 获取光标的当前位置
+export function getPosition(): null | {
+  left: number
+  top: number
+} {
+  // 获取当前光标位置getSelection()
+  const selection = window.getSelection()
+  if (selection.rangeCount === 0) {
+    return null
+  }
+  // 获取选中区域的范围 获取光标的范围
+  const range = selection.getRangeAt(0)
+  // 获取选中区域的边界 获取当前光标的坐标点 这个方法里面都有getBoundingClientRect()
+  const { top, left, height } = range.getBoundingClientRect()
+  // 获取当前光标的位置
+  const cursorPosition = {
+    left: left,
+    top: top + height,
+  }
+  return cursorPosition
 }

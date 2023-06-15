@@ -45,7 +45,7 @@ class LatexOupt {
     this.content = content
     const __config = Object.assign(this.defaultConfig, this.config)
     const innerHtml = transformer(this.content, __config)
-    this.container.innerHTML = __config.divideChinese ? innerHtml : `$$${innerHtml}$$`
+    this.container.innerText = __config.divideChinese ? innerHtml : `$$${innerHtml}$$`
     this.container.style.color = __config.textColor || '#333'
     renderLatex(this.container)
   }

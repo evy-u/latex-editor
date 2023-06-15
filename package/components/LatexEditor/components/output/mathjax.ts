@@ -68,7 +68,7 @@ export function setMathJaxConfig(mathJaxConfig?: Record<string, any>) {
 
 export function renderLatex(ele: HTMLElement) {
   return addMathJaxScript().then(() => {
-    return MathJax.typesetPromise()
+    return MathJax.typesetPromise([ele])
   })
 }
 

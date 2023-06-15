@@ -1,1 +1,1 @@
-export default function OptionsPanel(data: string[]): import("redom").RedomElement;
+export default function OptionsPanel(data: string[], position: any): void;

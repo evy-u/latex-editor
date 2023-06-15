@@ -82,7 +82,7 @@ function doGlobalRender() {
 onMounted(() => {
   editor = new LatexEditor(document.querySelector('.latex-editor'), {
     // =\\left\\{\\frac{2x^{2}+2x}{x+1},x\\neq-1,\nx-1,x=-1.\\right\\}则函数f(x)奇偶性如何?
-    content: 'f(x)',
+    content: '',
     mathOption: options,
   })
 })
