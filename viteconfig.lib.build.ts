@@ -9,7 +9,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, './package/index.ts'),
-      name: 'kezhi',
+      name: 'latex-lib',
       fileName: format => `index.${format}.js`,
     },
     outDir: 'latex-lib',

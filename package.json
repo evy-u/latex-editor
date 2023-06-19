@@ -1,25 +1,28 @@
 {
-  "name": "kz-latex-editor",
-  "version": "0.0.1",
-  "description": "",
+  "name": "@evyu/latex-editor",
+  "version": "0.0.2",
+  "description": "this is a latex editor package, it provide some help with writing math formula even if you don't understand latex.",
   "main": "./latex-lib/index.umd.js",
   "module": "./latex-lib/index.es.js",
   "scripts": {
     "husky": "husky install",
     "build": "vite build -c viteconfig.lib.build.ts && cp latex-lib/* demo",
     "dev": "vite --mode development",
-    "deploy": "vite build --mode development && node ./node_modules/learnable-lib/scripts/publish.js development"
+    "deploy": "vite build --mode development && node ./node_modules/@evyu/common-lib/scripts/publish.js development"
   },
-  "repository": "",
-  "author": "xhy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evy-u/latex-editor.git"
+  },
+  "author": "evyu",
   "license": "MIT",
   "dependencies": {
+    "@evyu/common-lib": "^0.0.1",
     "@types/lodash": "^4.14.194",
     "@vant/touch-emulator": "^1.4.0",
     "chalk": "^5.0.0",
     "element-plus": "^1.3.0-beta.5",
     "html2canvas": "^1.4.1",
-    "learnable-lib": "git+ssh://git@39.106.137.222:songle/learnable-lib.git#v0.0.235",
     "lodash": "^4.17.21",
     "recursive-match": "^1.0.2",
     "redom": "^3.29.1",
@@ -49,6 +52,19 @@
   "files": [
     "dist",
     "types",
-    "README.md"
-  ]
+    "README.md",
+    "demo.gif"
+  ],
+  "keywords": [
+    "latex-editor",
+    "latex",
+    "mathjax"
+  ],
+  "bugs": {
+    "url": "https://github.com/evy-u/latex-editor/issues"
+  },
+  "homepage": "https://github.com/evy-u/latex-editor#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

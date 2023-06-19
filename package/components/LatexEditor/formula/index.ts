@@ -41,29 +41,42 @@ export interface FormulaTypeItem {
   id: string
   name: string
   icon: string
-  data: FormulaItem[] | string[]
+  data: FormulaItem[]
   visibleDataList?: boolean
   isBase?: boolean
   desc?: string
 }
+
 const list: FormulaTypeItem[] = [
-  //   {
-  //     id: uniqueId(),
-  //     name: '直接使用',
-  //     icon: '',
-  //     data: baseIcon,
-  //     isBase: true,
-  //   },
-  //   {
-  //     id: uniqueId(),
-  //     name: '需要转义',
-  //     icon: '',
-  //     data: transIcon,
-  //     isBase: true,
-  //     desc: `escape字符表示原义时，前面加 \\，代表的是这个符号本身
-  // 由于以下字符在LaTeX中有特殊含义，例如：\\frac{1}{2} 中的大括号。
-  // 为了防止混淆，在以下字符表示自身含义时，需要在其前加 \\`,
-  //   },
+  {
+    id: uniqueId(),
+    name: '直接使用',
+    icon: '',
+    data: baseIcon.map(item => {
+      return {
+        icon: 'base',
+        name: item,
+        formula: item,
+      }
+    }) as FormulaItem[],
+    isBase: true,
+  },
+  {
+    id: uniqueId(),
+    name: '需要转义',
+    icon: '',
+    data: transIcon.map(item => {
+      return {
+        icon: 'base',
+        name: item,
+        formula: item,
+      }
+    }) as FormulaItem[],
+    isBase: true,
+    desc: `escape字符表示原义时，前面加 \\，代表的是这个符号本身
+  由于以下字符在LaTeX中有特殊含义，例如：\\frac{1}{2} 中的大括号。
+  为了防止混淆，在以下字符表示自身含义时，需要在其前加 \\`,
+  },
   {
     id: uniqueId(),
     name: '希腊字母',

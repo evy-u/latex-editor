@@ -63,8 +63,8 @@ class LatexInput {
   observerContentChange(mutation: MutationRecord) {
     this.editContent = ''
     this.setEditContent()
-    textToTextTag(mutation)
     if (mutation.type === 'characterData' && mutation.target) {
+      textToTextTag(mutation)
       this.keyLanguage = 'en'
       const targetElement = mutation.target as HTMLElement
       let newValue = targetElement.nodeValue || ''
@@ -107,13 +107,13 @@ class LatexInput {
     }
     let data = flattenDeep(
       formulas.map(item => {
-        if (Array.isArray(item.data)) {
+        if (Array.isArray(item.data) && !item.isBase) {
           return item.data.map(sub => sub.formula)
         }
       })
     )
     if (val) {
-      data = data.filter(item => item.includes(val))
+      data = data.filter(item => item?.includes(val))
     }
     let position = getPosition()
     if (!position || (!position.left && !position.top)) {

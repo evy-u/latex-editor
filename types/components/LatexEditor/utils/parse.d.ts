@@ -2,7 +2,7 @@ export declare enum MathType {
     latex = "latex",
     text = "text"
 }
-export declare type MatchItem = {
+export type MatchItem = {
     start: number;
     end: number;
     match: string;

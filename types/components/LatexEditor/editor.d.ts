@@ -1,4 +1,4 @@
-declare type OptionsT = {
+type OptionsT = {
     showTool?: boolean;
     content?: string;
     mathOption?: MathjaxOptionType;

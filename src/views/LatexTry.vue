@@ -41,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, watch, nextTick } from 'vue'
-import 'learnable-lib/dist/style.css'
+import '@evyu/common-lib/dist/style.css'
 import { LatexEditor, MathjaxOptionType } from 'latex-editor'
 
 let content = $ref('这是一个latex渲染的例子\\frac{分子}{分母}\n7878')

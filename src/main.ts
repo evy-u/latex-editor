@@ -7,6 +7,7 @@ import 'tailwindcss/tailwind.css'
 import 'element-plus/theme-chalk/index.css'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 import './style/vant.scss'
+import './style/element.scss'
 import '@vant/touch-emulator'
 
 const app = createApp(App)

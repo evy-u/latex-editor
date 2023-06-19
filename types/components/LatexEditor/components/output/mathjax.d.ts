@@ -1,4 +1,4 @@
-export declare type MathJaxObject = {
+export type MathJaxObject = {
     [x: string]: any;
     tex2chtmlPromise: (input: string) => Promise<HTMLElement>;
 };
