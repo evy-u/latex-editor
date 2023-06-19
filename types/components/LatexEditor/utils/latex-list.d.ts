@@ -1,3 +1,3 @@
 export declare const otherList: string[];
-declare const _default: any[];
+declare const _default: string[];
 export default _default;

@@ -13,7 +13,7 @@ export interface FormulaTypeItem {
     id: string;
     name: string;
     icon: string;
-    data: FormulaItem[] | string[];
+    data: FormulaItem[];
     visibleDataList?: boolean;
     isBase?: boolean;
     desc?: string;

@@ -1,7 +1,7 @@
 {
-  "name": "kz-latex-editor",
+  "name": "latex-editor",
   "version": "0.0.1",
-  "description": "",
+  "description": "this is a latex editor package, it provide some help with writing math formula even if you don't understand latex.",
   "main": "./latex-lib/index.umd.js",
   "module": "./latex-lib/index.es.js",
   "scripts": {
@@ -10,7 +10,10 @@
     "dev": "vite --mode development",
     "deploy": "vite build --mode development && node ./node_modules/learnable-lib/scripts/publish.js development"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xihaoyan/latex-editor.git"
+  },
   "author": "xhy",
   "license": "MIT",
   "dependencies": {
@@ -50,5 +53,14 @@
     "dist",
     "types",
     "README.md"
-  ]
+  ],
+  "keywords": [
+    "latexEditor",
+    "latex",
+    "mathjax"
+  ],
+  "bugs": {
+    "url": "https://github.com/xihaoyan/latex-editor/issues"
+  },
+  "homepage": "https://github.com/xihaoyan/latex-editor#readme"
 }

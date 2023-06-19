@@ -60,9 +60,9 @@ export function createElement(astTree: MatchItem[]): HTMLElement {
 function addRange(
   sel: Selection,
   config: {
-    startNode: HTMLElement
+    startNode: Node
     start: number
-    endNode: HTMLElement
+    endNode: Node
     end: number
   }
 ) {
@@ -214,19 +214,78 @@ export function textToTextTag(mutation: MutationRecord) {
   const selection = window.getSelection()
   const deepNode = recursiveFindDeepNode(selection!.focusNode!) as HTMLElement
   let parentNode = deepNode.parentNode as HTMLElement
-  let oldValue = mutation.oldValue || ''
+  let parentChildren = parentNode.children
+  if (
+    parentChildren.length >= 3 &&
+    parentChildren[0].className.includes('lx') &&
+    parentChildren[1].className.includes('bk start') &&
+    parentChildren[parentChildren.length - 1].className.includes('bk end')
+  ) {
+    return
+  }
+  let oldValue = mutation?.oldValue || ''
   let newValue = mutation.target.nodeValue || ''
-  if (deepNode.nodeType === 3 && parentNode.className.includes('lx') && newValue.length > oldValue?.length) {
+  if (deepNode.nodeType === 3 && parentNode.className.includes('bk') && newValue.length > oldValue?.length) {
     let lastStr = newValue.slice(newValue.indexOf(oldValue) + oldValue.length)
-    parentNode.innerHTML = oldValue
-    const textEle = el('text', lastStr)
-    mount(parentNode, textEle)
-    addRange(selection!, {
-      startNode: textEle,
-      endNode: textEle,
-      start: lastStr.length,
-      end: lastStr.length,
-    })
+    const nextSibling = mutation.target.parentElement?.nextSibling as HTMLElement | null
+    if (parentNode.className.includes('end')) {
+      if (nextSibling && nextSibling?.nodeType === 1 && nextSibling?.nodeName === 'TEXT') {
+        mutation.target.nodeValue = oldValue
+        nextSibling.innerText = lastStr + nextSibling?.innerText || ''
+        addRange(selection!, {
+          startNode: nextSibling.childNodes[0],
+          endNode: nextSibling.childNodes[0],
+          start: 1,
+          end: 1,
+        })
+      } else {
+        parentNode.innerHTML = oldValue
+        const textEle = el('text', lastStr)
+        parentNode.parentNode?.appendChild(textEle)
+        addRange(selection!, {
+          startNode: textEle,
+          endNode: textEle,
+          start: lastStr.length,
+          end: lastStr.length,
+        })
+      }
+    } else {
+      mutation.target.nodeValue = oldValue
+      nextSibling!.nodeValue = lastStr + nextSibling?.nodeValue || ''
+      addRange(selection!, {
+        startNode: nextSibling!,
+        endNode: nextSibling!,
+        start: 1,
+        end: 1,
+      })
+    }
+  } else if (
+    deepNode.nodeType === 3 &&
+    (parentNode.className.includes('lx') || parentNode.className.includes('latex-root')) &&
+    newValue.length > oldValue?.length
+  ) {
+    let lastStr = newValue.slice(newValue.indexOf(oldValue) + oldValue.length)
+    const nextSibling = mutation.target.nextSibling as HTMLElement | null
+    if (nextSibling && nextSibling?.nodeType === 1 && nextSibling?.nodeName === 'TEXT') {
+      mutation.target.nodeValue = oldValue
+      nextSibling.innerText = lastStr + nextSibling?.innerText || ''
+      addRange(selection!, {
+        startNode: nextSibling.childNodes[0],
+        endNode: nextSibling.childNodes[0],
+        start: 1,
+        end: 1,
+      })
+    } else {
+      parentNode.innerHTML = oldValue
+      const textEle = el('text', lastStr)
+      mount(parentNode, textEle)
+      addRange(selection!, {
+        startNode: textEle,
+        endNode: textEle,
+        start: lastStr.length,
+        end: lastStr.length,
+      })
+    }
   }
 }
 

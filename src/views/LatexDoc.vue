@@ -1,25 +1,29 @@
 <template>
   <div class="page-doc">
     <div class="header">
-      <div class="logo">KeZhi LaTex</div>
+      <img class="logo" src="@/assets/doc_logo.png" />
       <div class="right">
         <el-select
           v-model="selectValue"
-          placeholder="Please input"
+          placeholder="运算符号/除号/div"
           remote
           filterable
-          style="width: 400px; margin-left: 110px"
-          :suffix-icon="Search"
+          style="width: 346px"
           :suffix-transition="false"
           class="search"
           ref="searchRef"
           :remote-method="filterMethod"
           value-key="id"
+          size="large"
           :default-first-option="true"
+          :fit-input-width="false"
           @change="doSearch"
           @focus="searchFocus"
         >
-          <template #prefix>Cmd / Ctrl + K </template>
+          <template #prefix>
+            <span>Cmd / Ctrl + K</span>
+            <img src="@/assets/icon_arrow_line_down.png" />
+          </template>
           <el-option v-for="item in searchOptions" :key="item.id" :value="item"> {{ item.label }} {{ item.value }} </el-option>
         </el-select>
         <div class="nav">
@@ -29,25 +33,19 @@
       </div>
     </div>
 
-    <van-index-bar :index-list="indexList" :sticky="false" :sticky-offset-top="64" highlight-color="#329894">
+    <van-index-bar :index-list="indexList" :sticky="false" highlight-color="#fff" ref="indexBarRef">
       <van-index-anchor v-for="(item, index) in formulaTypeList" :key="item.name" :index="item.name">
-        <div class="type-item" :type-id="item.id">{{ item.name }}</div>
+        <div class="type-item" :type-id="item.id"><span class="dot"></span>{{ item.name }}</div>
         <div class="type-desc">{{ item.desc }}</div>
-        <div v-if="item.isBase" class="base-table">
-          <div v-for="(baseIcon, baseIndex) in item.data" :key="baseIndex" class="base-item">{{ baseIcon }}</div>
-        </div>
         <div class="formula-list">
           <div
             class="formula-icon"
-            :class="[`formula-${index}-${fIndex}`, `formula-${typeof fm === 'string' ? fm : fm.name}`]"
+            :class="[`formula-${index}-${fIndex}`, `formula-${fm.name}`, `${item.isBase ? 'base' : ''}`]"
             v-for="(fm, fIndex) in item.data"
             :key="fIndex"
-            @click="() => handleClickFormula(fm, `formula-${index}-${fIndex}`)"
           >
-            <template v-if="typeof fm === 'string'">
-              <div class="name">{{ fm }}</div>
-              <div class="icon">{{ fm }}</div>
-              <div class="text">{{ fm }}</div>
+            <template v-if="item.isBase">
+              {{ fm.name }}
             </template>
             <template v-else>
               <div class="name">{{ fm.name }}</div>
@@ -56,6 +54,15 @@
               </div>
               <div class="text">{{ fm.formula }}</div>
             </template>
+            <div class="mask">
+              <div class="crcle" @click="() => handleClickFormula(fm, `formula-${index}-${fIndex}`)">
+                <template v-if="!isCoped">
+                  <img src="@/assets/icon_copy.png" />
+                  <span>复制</span>
+                </template>
+                <span v-else>copied!</span>
+              </div>
+            </div>
           </div>
         </div>
       </van-index-anchor>
@@ -64,16 +71,14 @@
 </template>
 <script setup lang="ts">
 import { formulaTypeAllList, fontIconBaseUrl } from 'latex-editor'
-import { Search } from '@element-plus/icons-vue'
-import { KeMathJax, globalRender } from 'learnable-lib'
-import { onMounted, watch, nextTick } from 'vue'
+import { onMounted, nextTick } from 'vue'
 import { flatMapDeep } from 'lodash'
-import { ElMessage, ElTable } from 'element-plus'
 import { Shortcuts } from 'shortcuts'
 import { FormulaTypeItem, FormulaItem } from '../../types/components/LatexEditor/components/tool/formula'
 import _ from 'lodash'
 import { useRouter } from 'vue-router'
 import { copyByContent } from '../../package/utils/copy'
+import type { IndexBarInstance } from 'vant'
 
 type OptionItem = { label: string; value: any; id: number; parentId?: number }
 let formulaTypeList = formulaTypeAllList as unknown as FormulaTypeItem[]
@@ -86,8 +91,8 @@ const shortcuts = new Shortcuts()
 
 let selectValue = $ref<string | OptionItem>('')
 let searchOptions = $ref<OptionItem[]>([])
-let latexTableRef = $ref<InstanceType<typeof ElTable>[]>([])
 let searchRef = $ref<HTMLDivElement>()
+let indexBarRef = $ref<IndexBarInstance>()
 
 function filterMethod(val: string) {
   if (!val) {
@@ -140,12 +145,11 @@ function doSearch(data: OptionItem) {
   } else {
     ele = document.querySelector(`.formula-${data.label}`)
   }
-  console.log(data, ele, `.formula-${data.label}`)
   const activeArr = Array.from(document.querySelectorAll('.active')) as HTMLDivElement[]
   activeArr.forEach(item => {
     item.classList.remove('active')
   })
-  ele?.scrollIntoView({
+  ele?.parentElement?.parentElement?.scrollIntoView({
     block: 'center',
   })
   ele?.classList.add('active')
@@ -172,23 +176,24 @@ function toDoc() {
 }
 
 function toTry() {
-  router.push({
+  const route = router.resolve({
     name: 'latex-try',
   })
+  window.open(route.fullPath, '__blank')
 }
 
-watch(
-  () => formulaTypeList,
-  async () => {
-    if (formulaTypeList.length) {
-      await nextTick()
-      globalRender()
+function observerEleVisibleViewport() {
+  const ele = document.querySelector('.page-doc')!
+  const boxHeight = ele.getBoundingClientRect().height
+  ele.addEventListener('scroll', ev => {
+    const { y } = document.querySelector('.van-index-bar__index--active')!.getBoundingClientRect()
+    if (y > boxHeight - 80 || y <= 80) {
+      document.querySelector('.van-index-bar__index--active')?.scrollIntoView({
+        block: 'nearest',
+      })
     }
-  },
-  {
-    immediate: true,
-  }
-)
+  })
+}
 
 onMounted(() => {
   shortcuts.add([
@@ -201,68 +206,113 @@ onMounted(() => {
       },
     },
   ])
+  indexBarRef?.scrollTo('希腊字母')
+  nextTick(() => {
+    observerEleVisibleViewport()
+  })
 })
 
+let isCoped = $ref(false)
 async function handleClickFormula(item: FormulaItem | string, elClass: string) {
   if (typeof item === 'string') {
     await copyByContent(item)
   } else {
     await copyByContent(item.formula)
   }
-  ElMessage.success({
-    message: 'Copied！',
-    appendTo: `.${elClass}`,
-    icon: 'none',
-    duration: 800,
-  })
+  isCoped = true
+  const timer = setTimeout(() => {
+    isCoped = false
+    timer && clearTimeout(timer)
+  }, 300)
 }
 </script>
 <style lang="scss">
 .page-doc {
   .el-input__prefix {
-    left: 1px;
-    padding: 0 14px;
-    background: #f5f7fa;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    box-shadow: 0 1px 0 0 var(--el-input-border-color) inset, 0 -1px 0 0 var(--el-input-border-color) inset, -1px 0 0 0 var(--el-input-border-color) inset;
+    left: 0px;
+    padding: 0 12px 0 16px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background: #eef1f1;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.6);
+    border: 1px solid #e4e7ed;
+    border-right: none;
+    img {
+      height: 6px;
+      width: 10px;
+      margin-left: 8px;
+    }
   }
+
   .el-input__inner {
     box-sizing: border-box;
+    border-radius: 20px;
+    border-color: #eef1f1;
+    &::placeholder {
+      padding-left: 8px;
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  .el-input__inner:hover {
+    border-color: #eef1f1 !important;
+  }
+  .el-input.is-focus {
+    .el-input__prefix {
+      border-color: #32b2b7 !important;
+    }
   }
   .el-select .el-input__inner:focus,
   .el-select .el-input.is-focus .el-input__inner {
-    border-left-color: #dcdfe6 !important;
+    border-color: #32b2b7 !important;
   }
+
   .van-index-bar {
     box-sizing: border-box;
-    height: 100%;
-    padding: 0 40px 0 100px;
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-      display: none;
+    padding: 0px 48px 0px 170px;
+    position: relative;
+    & > div:last-of-type .van-index-anchor {
+      padding-bottom: 60px;
     }
   }
-  .van-index-bar__index {
-    font-family: Segoe UI Semibold;
+  .van-index-anchor {
+    background: inherit;
+    padding-left: 48px;
+    position: relative;
+    top: 80px;
   }
+
   .van-index-bar__sidebar {
+    position: fixed;
+    box-sizing: border-box;
+    top: 80px;
+    transform: translateY(0);
     left: 0;
     right: auto;
-    top: 53.4%;
+    width: 170px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding: 24px 0;
+    background: #fff;
   }
-  .van-index-anchor {
-    padding-left: 40px;
+  .van-index-bar__index {
+    padding: 0 36px;
+    text-align: left;
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.6);
   }
-  .el-message {
-    position: absolute;
-    top: 40%;
-    right: 8px;
-    min-width: 66px;
-    --el-message-padding: 4px;
-  }
-  .el-message__icon {
-    display: none !important;
+  .van-index-bar__index--active {
+    background: #32b2b7;
+    color: #fff;
   }
 }
 </style>
@@ -270,23 +320,28 @@ async function handleClickFormula(item: FormulaItem | string, elClass: string) {
 .page-doc {
   box-sizing: border-box;
   height: 100vh;
-  padding-top: 64px;
-  padding-bottom: 40px;
   overflow: hidden;
-  font-family: Segoe UI Semibold, sans-serif;
+  font-family: PingFangSC-Regular, PingFang SC;
+  background: #f5f6f6;
+  overflow-y: auto;
   .header {
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 50px;
-    padding: 0px 60px;
+    padding: 0px 36px;
     position: fixed;
     top: 0;
     width: 100%;
+    height: 80px;
     min-width: 1000px;
-    z-index: 9999;
-    background: #329894;
-    color: #fff;
+    z-index: 99;
+    border-bottom: 1px solid #bdcbcb;
+    background: #fff;
+    .logo {
+      height: 28px;
+      width: auto;
+    }
     .right {
       display: flex;
       align-items: center;
@@ -294,18 +349,41 @@ async function handleClickFormula(item: FormulaItem | string, elClass: string) {
     .nav {
       align-content: flex-end;
       display: flex;
-      margin-left: 24px;
-      cursor: pointer;
+
       .nav-item {
-        padding: 0 24px;
+        padding: 0 16px;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        border-radius: 20px;
+        background: #32b2b7;
+        font-size: 14px;
+        font-weight: 400;
+        color: #ffffff;
+        &:first-of-type {
+          margin-left: 16px;
+          margin-right: 8px;
+        }
       }
     }
   }
   .type-item {
-    font-size: 16px;
-    line-height: 42px;
-    font-weight: 700;
-    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    padding-top: 36px;
+    font-size: 20px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 28px;
+    .dot {
+      display: inline-block;
+      width: 6px;
+      height: 14px;
+      background: #32b2b7;
+      border-radius: 3px;
+    }
   }
   .type-desc {
     color: #888;
@@ -346,57 +424,111 @@ async function handleClickFormula(item: FormulaItem | string, elClass: string) {
     gap: 16px;
   }
   .formula-icon {
+    // box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 4px solid rgba(27, 31, 35, 0.05);
-    border-radius: 3px;
     cursor: pointer;
     position: relative;
     transition: all 0.3s;
     overflow: hidden;
-    border-radius: 4px;
-    box-shadow: none;
-    &:hover,
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #fff;
+    border: 3px solid #fff;
+
+    .mask {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      display: none;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      .crcle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        margin: auto;
+
+        img {
+          height: 22px;
+          width: 22px;
+          margin-bottom: 2px;
+        }
+        span {
+          font-size: 12px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #ffffff;
+          line-height: 17px;
+        }
+      }
+    }
+
+    &.base {
+      text-align: center;
+      line-height: 100px;
+      height: 100px;
+      // .mask {
+      //   .crcle {
+      //     height: 100%;
+      //     width: 0;
+      //   }
+      // }
+    }
+
+    &:hover .mask {
+      display: flex;
+    }
     &.active {
-      border: 4px solid #329894;
+      border: 3px solid #329894;
       box-shadow: 0px 0px 10px rgba(10, 31, 35, 0.3);
     }
     .name {
-      display: block;
-      color: #fff;
-      font-size: 16px;
-      background: #329894;
-      font-weight: 600;
+      font-size: 14px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.8);
+      padding: 12px 0;
+      border-bottom: 1px solid #edefef;
       text-align: center;
-      padding: 5px 5px 8px;
     }
     .text {
       display: block;
-      color: #666;
-      background: rgba(27, 31, 35, 0.05);
       text-align: center;
-      padding: 5px;
-      line-height: 1.3;
-      font-size: 18px;
-      font-family: monospace;
+      padding: 12px 0;
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.6);
       white-space: break-spaces;
       line-break: anywhere;
+      border-top: 1px solid #edefef;
     }
     .icon {
       display: block;
       text-align: center;
-      padding: 5px;
-      font-size: 20px;
+      padding: 6px 0;
+      max-height: 62px;
       overflow-x: scroll;
       img {
-        width: 60%;
+        width: 36%;
         height: auto;
         margin: auto;
       }
       &:nth-last-of-type(2) {
         img {
-          width: 36%;
+          width: 37%;
           min-height: 40px;
         }
       }

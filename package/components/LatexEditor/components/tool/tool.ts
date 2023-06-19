@@ -1,15 +1,17 @@
 import list, { fontIconBaseUrl, type FormulaItem } from '../../formula'
 import './tool.scss'
-let formulas = list.map(item => {
-  item.data = item.data
-    .map(dataItem => {
-      if (dataItem.icon) {
-        return dataItem
-      }
-    })
-    .filter(i => i)
-  return item
-})
+let formulas = list
+  .filter(i => !i.isBase)
+  .map(item => {
+    item.data = item.data
+      .map(dataItem => {
+        if (dataItem.icon) {
+          return dataItem
+        }
+      })
+      .filter(i => i) as FormulaItem[]
+    return item
+  })
 
 // console.log(formulas, 'formulas')
 interface ModuleParam {

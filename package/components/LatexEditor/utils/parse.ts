@@ -1,6 +1,5 @@
 import { recursiveMatch } from 'recursive-match'
 import list, { otherList } from './latex-list'
-import { MatchChainArray } from 'xregexp'
 
 let signList = list
 
