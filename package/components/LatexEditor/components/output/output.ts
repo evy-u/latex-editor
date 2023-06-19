@@ -1,5 +1,5 @@
 import { renderLatex, setMathJaxConfig, htmlToImageBase64 } from './mathjax'
-import { TransformerConfig, transformer } from 'learnable-lib'
+import { TransformerConfig, transformer } from '@evyu/common-lib'
 import './output.scss'
 
 export type MathjaxOptionType = TransformerConfig & {

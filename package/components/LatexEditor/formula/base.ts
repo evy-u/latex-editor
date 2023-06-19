@@ -1,5 +1,3 @@
-import { FormulaItem } from './index'
-
 const baseIcon = [
   '0',
   '1',

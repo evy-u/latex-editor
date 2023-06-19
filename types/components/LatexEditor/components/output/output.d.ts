@@ -1,5 +1,5 @@
-import { TransformerConfig } from 'learnable-lib';
-export declare type MathjaxOptionType = TransformerConfig & {
+import { TransformerConfig } from '@evyu/common-lib';
+export type MathjaxOptionType = TransformerConfig & {
     lineHeight?: string;
     textColor?: string;
     alignBetween?: boolean;

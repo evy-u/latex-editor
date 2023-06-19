@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "strict": true,
     "module": "ES6",
     "target": "ES2018",

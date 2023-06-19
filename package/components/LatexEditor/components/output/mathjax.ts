@@ -1,4 +1,4 @@
-import { mathJaxConfig, mathJaxScriptBaseUrl } from 'learnable-lib'
+import { mathJaxConfig, mathJaxScriptBaseUrl } from '@evyu/common-lib'
 import html2canvas from 'html2canvas'
 
 export type MathJaxObject = {

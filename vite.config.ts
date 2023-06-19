@@ -8,7 +8,7 @@ const pathSrc = path.resolve(__dirname, './src')
 const pathVue3 = path.resolve(__dirname, './package/index.ts')
 // https://vitejs.dev/config/
 export default defineConfig({
-  envDir: path.resolve(__dirname, './env'),
+  base: './',
   server: {
     port: 6001,
     host: true,
@@ -30,9 +30,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        //element-plus error
         charset: false,
-        // additionalData: `@import "./src/styles/variables.scss";`,
       },
     },
   },
