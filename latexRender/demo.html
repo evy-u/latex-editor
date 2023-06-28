@@ -6,24 +6,89 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <head name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>latex-render</title>
+    <title>latex-div</title>
     <link rel="stylesheet" href="./style.css">
-    <script src="./mathjax.js"></script>
+    <script src="./latex.umd.js"></script>
   </head>
 
 <body>
-  <div class="latex-div"></div>
+
+  <div class="question"></div>
+
+  <div style="color: green;padding: 40px 0;">
+    -----------------------------------------分割线----------------------------------------------</div>
+
+  <!-- test start -->
+  <latex-div>\because抛物线y=-\frac{1}{2}x^{2}向上平移2个单位长度,再向右平移1个单位长度得到的抛物线是y=-\frac{1}{2}(x-1)^{2}+2,\n\thereforea=-\frac{1}{2},h=-1,k=2.</latex-div>
+  <latex-div lineHeight="100px" textColor="#0089ff">\angleABC=90^{\circ}\tab{4}\underline{underline}</latex-div>
+  <!-- test start -->
   <script>
-    let defaultConfig = { // 非必传
-      lineBreak: true, // 换行
-      lineHeight: '20px', // 行高
-      textColor: '#333', // 文字颜色
-      divideChinese: false, // 将中文从latex中拆分出来
-      wrapMathrm: true, // 非罗马字体
+    let json = {
+      "questionBody": "8.根据下列要求画图\\blank{\\_{15}}{1/3/L},\\blank{\\_{15}}{2/3/L},\\blank{\\_{150}}{3/3/L}.",
+      "questionId": 57797,
+      "questionImageList": [
+        {
+          "fileWidth": 321,
+          "imgUrl": "http://homework-test0.oss-cn-beijing.aliyuncs.com/2667180380729950pic.jpg?Expires=1685176762&amp;OSSAccessKeyId=LTAI4Fgkj6vVSgC8hjWC5KVN&amp;Signature=17Yaa2oPrM52Hwh32n7g%2BI1szHY%3D"
+        }
+      ],
+      "questionNo": "8",
+      "questionSubList": [
+        {
+          "answerAreaHeight": 12,
+          "optionList": [],
+          "questionSubImageList": [
+            {
+              "fileWidth": 670,
+              "imgUrl": "https://homework-test0.oss-cn-beijing.aliyuncs.com/17425010537124033pic.jpg?Expires=1685176762&amp;OSSAccessKeyId=LTAI4Fgkj6vVSgC8hjWC5KVN&amp;Signature=fNYKMUfJSXjTgsXUh4dcIxvEthM%3D"
+            }
+          ],
+          "questionSubInternalId": 10,
+          "questionSubNo": "1",
+          "subQuestionBody": "(1)如图1所示,过点A画MN\\parallelBC,\\blank{\\_{15}}{1/2/L};"
+        },
+        {
+          "answerAreaHeight": 12,
+          "optionList": [],
+          "questionSubImageList": [
+            {
+              "fileWidth": 670,
+              "imgUrl": "https://homework-test0.oss-cn-beijing.aliyuncs.com/17425010649307408pic.jpg?Expires=1685176762&amp;OSSAccessKeyId=LTAI4Fgkj6vVSgC8hjWC5KVN&amp;Signature=xC6XXj8WVnOUl89VOVks5SXfo0k%3D"
+            }
+          ],
+          "questionSubInternalId": 11,
+          "questionSubNo": "2",
+          "subQuestionBody": "(2)如图2所示,过点P画PE\\parallelOA,交OB于点E,过点P画PH\\parallelOB,交OA于点H\\blank{\\_{15}}{2/2/L};"
+        },
+        {
+          "answerAreaHeight": 12,
+          "optionList": [],
+          "questionSubImageList": [
+            {
+              "fileWidth": 670,
+              "imgUrl": "https://homework-test0.oss-cn-beijing.aliyuncs.com/17425010774118661pic.jpg?Expires=1685176762&amp;OSSAccessKeyId=LTAI4Fgkj6vVSgC8hjWC5KVN&amp;Signature=KbtVMf7Opk21YZrJksyZGHjggx8%3D"
+            }
+          ],
+          "questionSubInternalId": 12,
+          "questionSubNo": "3",
+          "subQuestionBody": "(3)如图3所示,过点C画CE\\parallelDA,与AB交于点E,过点C画CF\\parallelDB,与AB的延长线交于点F\\blank{\\_{15}}{3/2/L}."
+        }
+      ]
     }
 
+    // 单题渲染
+    const question = document.querySelector('.question')
+    let questionBodyHtml = `<latex-div>${json.questionBody}</latex-div>`
+    json.questionSubList.forEach(sub => {
+      questionBodyHtml += `<latex-div>${sub.questionSubNo}.${sub.subQuestionBody}</latex-div>`
+    })
+    question.innerHTML = questionBodyHtml
+
     console.log('render start')
-    latexRender(document.querySelector('.latex-div'), `\\because抛物线y=-\\frac{1}{2}x^{2}向上平移2个单位长度,再向右平移1个单位长度得到的抛物线是y=-\\frac{1}{2}(x-1)^{2}+2,\n\\thereforea=-\\frac{1}{2},h=-1,k=2.`, defaultConfig).then(() => {
+    latexRender({
+      textColor: '#666',
+      lineHeight: '36px'
+    }).then(() => {
       console.log('render over')
     })
 

@@ -16,7 +16,7 @@ export declare function setMathJaxConfig(mathJaxConfig?: Record<string, any>): v
  * @param option Object 非必传
  * @returns
  */
-export declare function latexRender(ele: HTMLElement, content?: string, option?: {
+export declare function latexRender(option?: {
     lineBreak?: boolean;
     lineHeight?: string;
     textColor?: string;

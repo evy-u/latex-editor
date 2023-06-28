@@ -106,7 +106,8 @@ export function latexRender(option?: {
   eles.forEach(ele => {
     if (ele instanceof HTMLElement) {
       ele.style.display = 'block'
-      const content = ele?.innerText.replace(/\\n/g, '\n') || ''
+      console.log(ele?.innerText)
+      const content = ele?.innerHTML || ''
       const innerHtml = transformer(content, {
         lineBreak: ele.getAttribute('lineBreak') === 'true' ? true : config.lineBreak,
         divideChinese: ele.getAttribute('divideChinese') === 'true' ? true : config.divideChinese,
@@ -123,7 +124,7 @@ export function latexRender(option?: {
 
   return addMathJaxScript().then(() => {
     return MathJax.typesetPromise().then(() => {
-      const eles = Array.from(document.querySelectorAll('latex-render')) as HTMLElement[]
+      const eles = Array.from(document.querySelectorAll('latex-div')) as HTMLElement[]
       eles.forEach(ele => {
         let lineBreak = ele.getAttribute('lineBreak') === 'true' ? true : config.lineBreak
         if (lineBreak !== config.lineBreak) {
@@ -169,8 +170,6 @@ function loadCssCode(code) {
   var head = document.getElementsByTagName('head')[0]
   head.appendChild(style)
 }
-
-globalThis.latexRender = latexRender
 
 // export function htmlToImageBase64(ele?: HTMLDivElement): Promise<string> {
 //   if (!ele) {
