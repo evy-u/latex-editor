@@ -2,7 +2,7 @@
 
 1. 提供了 umd 和 es(js, ts)两种使用模式, `umd` 可供在浏览器中`script.src`引入， `es` 可在 vue 中`import`引入. 这两种模式分别提供了 demo：
 
-- demo.html（umd）
+- demo.html（umd + js）
 - demo.vue2.vue (vue2.x + es + js)
 - demo.vue3.ts.vue (vue3.x + es + ts)
 
@@ -25,7 +25,8 @@
     |divideChinese|Boolean|否|false|将中文从 latex 中拆分出来|
     |wrapMathrm|Boolean|否|true|去除罗马字体|
 
-### 注意
+#### 注意
 
 - latex 渲染的过程在页面上会展示出来，这是不可避免的，可以选择在 latexRender 的回调中添加 loading 或其他解决办法
+- **不要忘记引入 style.css, 否则某些公式会不太美观或者换行错误**
 - 目前支持的 latex，可参考 [latex 文档](http://doc.latex.ai.kezhitech.com/doc)
